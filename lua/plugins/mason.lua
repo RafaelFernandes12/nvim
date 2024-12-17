@@ -10,10 +10,11 @@ return {
 
 		mason_lsp.setup({
 			ensure_installed = {
-				"ts_ls",
+				"vtsls",
 				"html",
 				"tailwindcss",
 				"lua_ls",
+        "pyright"
 			},
 			automatic_installation = true,
 		})

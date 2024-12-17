@@ -27,16 +27,10 @@ keymap("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "move selected lines up" })
 keymap("n", "<leader>ss", function()
 	vim.cmd("write")
 	vim.lsp.buf.format({ async = false })
-	vim.lsp.buf.execute_command({
-		command = "vtsls.organizeImports",
-		arguments = { vim.api.nvim_buf_get_name(0) },
-	})
 end, { desc = "save, format and organize the imports" })
-keymap("n", "<leader>sa", ":wa<CR>", { desc = "write all" })
-keymap("n", "<leader>qq", ":close<CR>", { desc = "exit" })
-keymap("n", "<leader>qa", ":q!<CR>", { desc = "exit vim" })
-keymap("n", "<C-a>", "GVgg", { desc = "select the whole file" })
-
+keymap("n", "<leader>sa", ":wa<CR>", { desc = "save all buffers" })
+keymap("n", "<leader>q", ":q<CR>", vim.tbl_extend("force", opts, { desc = "quit" }))
+keymap("n", "<C-a>", "GVgg", vim.tbl_extend("force", opts, { desc = "select all" }))
 -- Window management keymaps
 keymap("n", "<leader>w-", ":split<CR>", vim.tbl_extend("force", opts, { desc = "Split window horizontally" }))
 keymap("n", "<leader>w\\", ":vsplit<CR>", vim.tbl_extend("force", opts, { desc = "Split window vertically" }))
@@ -47,5 +41,6 @@ keymap("n", "<leader>t", ":split | terminal<CR>", vim.tbl_extend("force", opts, 
 keymap("t", "<Esc>", [[<C-\><C-n>]], vim.tbl_extend("force", opts, { desc = "Exit terminal mode to normal mode" }))
 
 -- find and replace keymaps
+-- keymap("n", "<leader>f", "/", { desc = "find" })
 vim.keymap.set("n", "<leader>rw", ":%s/<C-r><C-w>//g<Left><Left>", { desc = "Replace word under cursor" })
 vim.keymap.set("n", "<leader>rc", ":%s/<C-r><C-w>//gc<Left><Left>", { desc = "Replace word under cursor confirmation" })

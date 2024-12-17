@@ -24,12 +24,11 @@ local config = {
 		"java.base/java.util=ALL-UNNAMED",
 		"--add-opens",
 		"java.base/java.lang=ALL-UNNAMED",
-		"-javaagent:",
-		"~/library/java/lombok.jar",
+		"-javaagent:" .. home .. "/.local/share/nvim/mason/packages/jdtls/lombok.jar",
 		"-jar",
-		"~/library/java/plugins/org.eclipse.equinox.launcher_*.jar",
+		vim.fn.glob(home .. "/.local/share/nvim/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_*.jar"),
 		"-configuration",
-		"~/library/java/config_linux/",
+		home .. "/.local/share/nvim/mason/packages/jdtls/config_linux",
 		"-data",
 		workspace_dir,
 		"-Dosgi.os=linux", -- Ensures correct OS is detected
@@ -73,3 +72,13 @@ local config = {
 	},
 }
 require("jdtls").start_or_attach(config)
+-- transform these to lua keymaps
+vim.api.nvim_set_keymap("n", "<leader>oi", "<Cmd>lua require'jdtls'.organize_imports()<CR>", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("n", "<leader>dt", "<Cmd>lua require'jdtls'.test_class()<CR>", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("n", "<leader>dn", "<Cmd>lua require'jdtls'.test_nearest_method()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("v", "<leader>ev", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>ev", "<Cmd>lua require('jdtls').extract_variable()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("v", "<leader>em", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>em", "<Cmd>lua require('jdtls').extract_method()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("v", "<leader>ec", "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>ec", "<Cmd>lua require('jdtls').extract_constant()<CR>", { noremap = true, silent = true })
