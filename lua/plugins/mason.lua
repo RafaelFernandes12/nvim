@@ -16,7 +16,7 @@ return {
 				"lua_ls",
         "pyright"
 			},
-			automatic_installation = true,
+			automatic_installation = false,
 		})
 	end,
 }
