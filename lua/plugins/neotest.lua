@@ -6,10 +6,15 @@ return {
 		"antoinemadec/FixCursorHold.nvim",
 		"nvim-treesitter/nvim-treesitter",
 		"nvim-neotest/neotest-jest",
+		"rcasia/neotest-java",
 	},
 	config = function()
 		require("neotest").setup({
 			adapters = {
+				require("neotest-java")({
+					command = "mvn",
+					args = { "test" },
+				}),
 				require("neotest-jest")({
 					jestCommand = "npm test --",
 					jestConfigFile = "custom.jest.config.ts",

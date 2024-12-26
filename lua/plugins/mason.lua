@@ -4,7 +4,7 @@ return {
 		"williamboman/mason-lspconfig.nvim",
 	},
 	lazy = false,
-	config = function()
+  config = function()
 		require("mason").setup()
 		local mason_lsp = require("mason-lspconfig")
 
@@ -14,9 +14,10 @@ return {
 				"html",
 				"tailwindcss",
 				"lua_ls",
-        "pyright"
+        'jdtls',
+        'pyrigth'
 			},
-			automatic_installation = false,
+			automatic_installation = true,
 		})
 	end,
 }

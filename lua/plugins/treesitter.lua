@@ -46,20 +46,6 @@ return {
 					node_decremental = "grm",
 				},
 			},
-
-			textobjects = {
-				select = {
-					enable = true,
-					keymaps = {
-						["aa"] = "@parameter.outer",
-						["ia"] = "@parameter.inner",
-						["af"] = "@function.outer",
-						["if"] = "@function.inner",
-						["ac"] = "@class.outer",
-						["ic"] = "@class.inner",
-					},
-				},
-			},
 		})
 	end,
 }
