@@ -1,16 +1,23 @@
 return {
-  { "f-person/git-blame.nvim",
-    -- load the plugin at startup
-    event = "VeryLazy",
-    opts = {
-      enabled = true,
-      message_template = " <summary> • <date> • <author> • <<sha>>",
-      date_format = "%m-%d-%Y %H:%M:%S",
-      virtual_text_column = 1,
-    },
-    config = function()
-      vim.keymap.set("n", "<leader>gb", "<cmd>GitBlameToggle<CR>", { desc = "Git Toggle Git Blame" })
-      vim.keymap.set("n", "<leader>gs", "<cmd>GitBlameOpenCommitURL<CR>", { desc = "Git Show Commit URL" })
-      vim.keymap.set("n", "<leader>gc", "<cmd>GitBlameCopySHA<CR>", { desc = "Git Copy Commit SHA" })
-    end, }
+	"NeogitOrg/neogit",
+	dependencies = {
+		"nvim-lua/plenary.nvim", -- required
+		"sindrets/diffview.nvim", -- optional - Diff integration
+
+		-- Only one of these is needed.
+		"nvim-telescope/telescope.nvim", -- optional
+		"ibhagwan/fzf-lua", -- optional
+		"echasnovski/mini.pick", -- optional
+	},
+	config = function()
+		require("neogit").setup({})
+		local keymap = vim.api.nvim_set_keymap
+		local opts = { noremap = true, silent = true }
+
+		-- Open Neogit
+		keymap("n", "<leader>gg", ":Neogit<CR>", opts) -- Open Neogit in the current directory
+		keymap("n", "<leader>gs", ":Neogit status<CR>", opts) -- Open Neogit status view
+		keymap("n", "<leader>gl", ":Neogit log<CR>", opts) -- Open Neogit log view
+		keymap("n", "<leader>gb", ":Neogit branch<CR>", opts)
+	end,
 }
