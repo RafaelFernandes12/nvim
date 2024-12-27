@@ -35,14 +35,10 @@ keymap("n", "<C-a>", "GVgg", vim.tbl_extend("force", opts, { desc = "select all"
 keymap("n", "<leader>w-", ":split<CR>", vim.tbl_extend("force", opts, { desc = "Split window horizontally" }))
 keymap("n", "<leader>w/", ":vsplit<CR>", vim.tbl_extend("force", opts, { desc = "Split window vertically" }))
 keymap("n", "<leader>w=", "<C-w>=", vim.tbl_extend("force", opts, { desc = "Equalize window sizes" }))
-keymap("n", "<leader>w<Left>", ":vertical resize -5<CR>", vim.tbl_extend("force", opts, { desc = "Decrease window width" }))
-keymap("n", "<leader>w<Right>", ":vertical resize +5<CR>", vim.tbl_extend("force", opts, { desc = "Increase window width" }))
-keymap("n", "<leader>w<Up>", ":resize +5<CR>", vim.tbl_extend("force", opts, { desc = "Increase window height" }))
-keymap("n", "<leader>w<Down>", ":resize -5<CR>", vim.tbl_extend("force", opts, { desc = "Decrease window height" }))
-
--- Terminal keymap
-keymap("n", "<leader>t", ":split | terminal<CR>", vim.tbl_extend("force", opts, { desc = "Open a terminal below" }))
-keymap("t", "<Esc>", [[<C-\><C-n>]], vim.tbl_extend("force", opts, { desc = "Exit terminal mode to normal mode" }))
+keymap("n", "<C-Right>", ":vertical resize -2<CR>", vim.tbl_extend("force", opts, { desc = "Decrease window width" }))
+keymap("n", "<C-left>", ":vertical resize +2<CR>", vim.tbl_extend("force", opts, { desc = "Increase window width" }))
+keymap("n", "<C-Up>", ":resize +2<CR>", vim.tbl_extend("force", opts, { desc = "Increase window height" }))
+keymap("n", "<C-Down>", ":resize -2<CR>", vim.tbl_extend("force", opts, { desc = "Decrease window height" }))
 
 -- find and replace keymaps
 vim.keymap.set("n", "<leader>rw", ":%s/<C-r><C-w>//g<Left><Left>", { desc = "Replace word under cursor" })
