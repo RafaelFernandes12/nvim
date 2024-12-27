@@ -1,23 +1,30 @@
 return {
-	"NeogitOrg/neogit",
-	dependencies = {
-		"nvim-lua/plenary.nvim", -- required
-		"sindrets/diffview.nvim", -- optional - Diff integration
+  {
+    "NeogitOrg/neogit",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "sindrets/diffview.nvim",
 
-		-- Only one of these is needed.
-		"nvim-telescope/telescope.nvim", -- optional
-		"ibhagwan/fzf-lua", -- optional
-		"echasnovski/mini.pick", -- optional
-	},
-	config = function()
-		require("neogit").setup({})
-		local keymap = vim.api.nvim_set_keymap
-		local opts = { noremap = true, silent = true }
+      "nvim-telescope/telescope.nvim",
+      "ibhagwan/fzf-lua",
+      "echasnovski/mini.pick",
+    },
+    config = function()
+      require("neogit").setup({})
+      local keymap = vim.api.nvim_set_keymap
+      local opts = { noremap = true, silent = true }
 
-		-- Open Neogit
-		keymap("n", "<leader>gg", ":Neogit<CR>", opts) -- Open Neogit in the current directory
-		keymap("n", "<leader>gs", ":Neogit status<CR>", opts) -- Open Neogit status view
-		keymap("n", "<leader>gl", ":Neogit log<CR>", opts) -- Open Neogit log view
-		keymap("n", "<leader>gb", ":Neogit branch<CR>", opts)
-	end,
+      keymap("n", "<leader>gg", ":Neogit<CR>", opts)
+    end,
+  },
+  {
+    "lewis6991/gitsigns.nvim",
+    config = function()
+      require("gitsigns").setup({
+        vim.keymap.set("n", "<leader>gh", ":Gitsigns preview_hunk<CR>", { noremap = true, silent = true }),
+        vim.keymap.set("n", "<leader>gR", ":Gitsigns reset_buffer<CR>", { noremap = true, silent = true }),
+        vim.keymap.set("n", "<leader>gb", ":Gitsigns blame_line<CR>", { noremap = true, silent = true }),
+      })
+    end,
+  },
 }
