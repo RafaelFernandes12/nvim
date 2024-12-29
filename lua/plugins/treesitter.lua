@@ -1,7 +1,7 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
 	dependencies = {
-		"nvim-treesitter/nvim-treesitter-textobjects",
+		"nvim-treesitter/nvim-treesitter-textobjects",  -- Add this line to enable text objects
 	},
 	build = ":TSUpdate",
 	config = function()
@@ -44,6 +44,37 @@ return {
 					node_incremental = "grn",
 					scope_incremental = "grc",
 					node_decremental = "grm",
+				},
+			},
+
+			-- Enable and configure text objects
+			textobjects = {
+				select = {
+					enable = true,
+					keymaps = {
+						["aa"] = "@parameter.outer",  -- Select outer parameter
+						["ia"] = "@parameter.inner",  -- Select inner parameter
+						["af"] = "@function.outer",   -- Select outer function
+						["if"] = "@function.inner",   -- Select inner function
+						["ac"] = "@class.outer",      -- Select outer class
+						["ic"] = "@class.inner",      -- Select inner class
+					},
+				},
+				move = {
+					enable = true,
+					set_jumps = true,  -- Update jumps
+					keymaps = {
+						["m"] = "@function.outer",  -- Move to next function
+						["M"] = "@function.outer",  -- Move to previous function
+						["["] = "@class.outer",     -- Move to previous class
+						["]"] = "@class.outer",     -- Move to next class
+					},
+				},
+				swap = {
+					enable = true,
+					keymaps = {
+						["<leader>a"] = "@parameter.inner",  -- Swap parameters
+					},
 				},
 			},
 		})

@@ -14,8 +14,7 @@ return {
 				"html",
 				"tailwindcss",
 				"lua_ls",
-        'jdtls',
-        'pyrigth'
+        'jdtls'
 			},
 			automatic_installation = true,
 		})

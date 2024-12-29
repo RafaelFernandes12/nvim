@@ -45,3 +45,5 @@ vim.keymap.set("n", "<leader>rw", ":%s/<C-r><C-w>//g<Left><Left>", { desc = "Rep
 vim.keymap.set("n", "<leader>rc", ":%s/<C-r><C-w>//gc<Left><Left>", { desc = "Replace word under cursor confirmation" })
 
 keymap("n", "<leader>lI", ":LspInfo<CR>", vim.tbl_extend("force", opts, { desc = "lspInfo" }))
+keymap("n", "L", "$", vim.tbl_extend("force", opts, { desc = "end of the line" }))
+keymap("n", "H", "^", vim.tbl_extend("force", opts, { desc = "start of the line" }))
