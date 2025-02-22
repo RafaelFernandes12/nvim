@@ -1,51 +1,72 @@
 return {
-	-- "nvim-java/nvim-java",
-	-- config = function()
-	-- 	-- Setup Java
-	-- 	require("java").setup()
-	--
-	-- 	-- Define keymaps
-	-- 	local keymaps = {
-	-- 		["<leader>lr"] = { "<cmd>Telescope lsp_references<CR>", "Show LSP references" },
-	-- 		["<leader>ld"] = { vim.lsp.buf.definition, "Go to definition" },
-	-- 		["<leader>li"] = { "<cmd>Telescope lsp_implementations<CR>", "Show LSP implementations" },
-	-- 		["<leader>lt"] = { "<cmd>Telescope lsp_type_definitions<CR>", "Show LSP type definitions" },
-	-- 		["<leader>lc"] = { vim.lsp.buf.code_action, "See available code actions" },
-	-- 		["<leader>lsr"] = { vim.lsp.buf.rename, "Smart rename" },
-	-- 		["<leader>D"] = { "<cmd>Telescope diagnostics bufnr=0<CR>", "Show buffer diagnostics" },
-	-- 		["<leader>d"] = { vim.diagnostic.open_float, "Show line diagnostics" },
-	-- 		["K"] = { vim.lsp.buf.hover, "Show documentation" },
-	-- 		["<leader>lrs"] = { ":LspRestart<CR>", "Restart LSP" },
-	-- 		["<leader>lR"] = { ":LspRenameFile<CR>", "Rename current file" },
-	-- 		["<leader>tu"] = { "<cmd>Neotest run<CR>", "teste" },
-	-- 		-- create a test to run the nearest test
-	-- 		-- ["<leader>tn"] = { ":require('java').test.run_nearest_test()", "Run nearest test" },
-	-- 	}
-	--
-	-- 	-- Function to apply keymaps
-	-- 	local function set_lsp_keymaps(bufnr)
-	-- 		for key, map in pairs(keymaps) do
-	-- 			vim.keymap.set("n", key, map[1], { desc = map[2], buffer = bufnr, noremap = true, silent = true })
-	-- 		end
-	-- 	end
-	--
-	-- 	-- Setup jdtls (Java Language Server) with on_attach for keymaps
-	-- 	require("lspconfig").jdtls.setup({
-	-- 		on_attach = function(client, bufnr)
-	-- 			set_lsp_keymaps(bufnr)
-	-- 		end,
-	--      handlers = {
-	-- 	-- By assigning an empty function, you can remove the notifications
-	-- 	-- printed to the cmd
-	-- 	["$/progress"] = function(_, result, ctx) end,
-	-- },
-	-- 		settings = {
-	-- 			java = {
-	-- 				format = {
-	-- 					enabled = true,
-	-- 				},
-	-- 			},
-	-- 		},
-	-- 	})
-	-- end,
+  -- {
+  -- 	"nvim-java/nvim-java",
+  -- 	dependencies = {
+  -- 		"nvim-java/java-core",
+  -- 		"nvim-java/lua-async-await",
+  -- 		"nvim-java/nvim-java-refactor",
+  -- 		"nvim-java/nvim-java-dap",
+  -- 		"nvim-java/nvim-java-test",
+  -- 		"mfussenegger/nvim-jdtls", -- Java LSP
+  -- 	},
+  -- 	config = function()
+  -- 		-- Load nvim-java
+  -- 		require("java").setup()
+  --
+  -- 		-- Configure jdtls (Java LSP)
+  -- 		local config = {
+  -- 			cmd = {
+  -- 				"java", -- or path to your Java executable
+  -- 				"-Declipse.application=org.eclipse.jdt.ls.core.id1",
+  -- 				"-Dosgi.bundles.defaultStartLevel=4",
+  -- 				"-Declipse.product=org.eclipse.jdt.ls.core.product",
+  -- 				"-Dlog.level=ALL",
+  -- 				"-Xmx1G",
+  -- 				"--add-modules=ALL-SYSTEM",
+  -- 				"--add-opens",
+  -- 				"java.base/java.util=ALL-UNNAMED",
+  -- 				"--add-opens",
+  -- 				"java.base/java.lang=ALL-UNNAMED",
+  -- 				"-jar",
+  -- 				vim.fn.stdpath("data") .. "/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_*.jar",
+  -- 				"-configuration",
+  -- 				vim.fn.stdpath("data") .. "/mason/packages/jdtls/config_linux", -- Use 'config_mac' or 'config_win' for macOS/Windows
+  -- 				"-data",
+  -- 				vim.fn.stdpath("data") .. "/workspace/" .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t"),
+  -- 			},
+  -- 			root_dir = vim.fn.getcwd(),
+  -- 			settings = {
+  -- 				java = {
+  -- 					configuration = {
+  -- 						runtimes = {
+  -- 							{
+  -- 								name = "JavaSE-17",
+  -- 								path = "/path/to/jdk-17", -- Replace with your JDK path
+  -- 							},
+  -- 						},
+  -- 					},
+  -- 				},
+  -- 			},
+  -- 			init_options = {
+  -- 				bundles = {},
+  -- 			},
+  -- 			on_attach = function(client, bufnr)
+  -- 				-- Keymaps for LSP
+  -- 				local opts = { noremap = true, silent = true, buffer = bufnr }
+  --
+  -- 				-- LSP keymaps
+  -- 				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- Go to definition
+  -- 				vim.keymap.set("n", "gr", vim.lsp.buf.references, opts) -- Find references
+  -- 				vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts) -- Go to implementation
+  -- 				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts) -- Show documentation
+  -- 				vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- Rename symbol
+  -- 				vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts) -- Code actions
+  -- 				vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, opts) -- Format code
+  -- 			end,
+  -- 		}
+  --
+  -- 		-- Start jdtls
+  -- 		require("jdtls").start_or_attach(config)
+  -- 	end,
+  -- },
 }

@@ -8,6 +8,7 @@ local custom_highlights = {
 	EndOfBuffer = { bg = "#000000" }, -- Background after the end of buffer
 	WinSeparator = { bg = "#000000" }, -- Window separators
 }
+
 return {
 	{
 		-- "folke/tokyonight.nvim",
@@ -23,11 +24,11 @@ return {
 		-- name = "catppuccin",
 		-- priority = 1000,
 		-- config = function()
-		-- 	require("catppuccin").setup({
-		-- 		flavour = "mocha", -- Choose the variant
-		-- 		custom_highlights = custom_highlights,
-		-- 	})
-		-- 	vim.cmd.colorscheme("catppuccin")
+		--   require("catppuccin").setup({
+		--     flavour = "mocha", -- Choose the variant
+		--     -- custom_highlights = custom_highlights,
+		--   })
+		--   vim.cmd.colorscheme("catppuccin")
 		-- end,
 	},
 	{
@@ -36,7 +37,6 @@ return {
 		config = function()
 			require("rose-pine").setup({
 				variant = "moon",
-				-- custom_highlights = custom_highlights,
 				palette = {
 					moon = {
 						base = "#000000",
@@ -44,6 +44,18 @@ return {
 				},
 			})
 			vim.cmd("colorscheme rose-pine-moon")
+			vim.api.nvim_set_hl(0, "TelescopeBorder", { --[[ fg = "#000000", ]]
+				bg = "#000000",
+			})
+			vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "#000000" })
+			vim.api.nvim_set_hl(0, "TelescopePromptNormal", { bg = "#000000" })
+			vim.api.nvim_set_hl(0, "TelescopeResultsNormal", { bg = "#000000" })
+			vim.api.nvim_set_hl(0, "TelescopePreviewNormal", { bg = "#000000" })
+
+			-- Override highlight groups for markdown code blocks
+			vim.api.nvim_set_hl(0, "RenderMarkdownBackground", { bg = "#000000" })
+			vim.api.nvim_set_hl(0, "RenderMarkdownCodeBlock", { bg = "#000000", fg = "#ffffff" })
+			vim.api.nvim_set_hl(0, "RenderMarkdownInlineCode", { bg = "#000000", fg = "#ffffff" })
 		end,
 	},
 	{

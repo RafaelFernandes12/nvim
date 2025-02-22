@@ -5,6 +5,7 @@ return {
 		"MunifTanjim/nui.nvim",
 		"rcarriga/nvim-notify",
 	},
+
 	config = function()
 		---@diagnostic disable-next-line: missing-fields
 		require("noice").setup({
@@ -17,11 +18,8 @@ return {
 			},
 			routes = {
 				{
-					filter = {
-						event = "msg_show",
-						kind = "",
-					},
-					opts = { skip = true },
+					view = "notify",
+					filter = { event = "msg_showmode" },
 				},
 			},
 			presets = {
