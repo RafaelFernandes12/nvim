@@ -55,7 +55,7 @@ local ts_snippets = {
   s(
     "ue",
     fmt([[useEffect(() => {{{}}}, [{}]);]], {
-      i(1, logic),          -- Effect logic
+      i(1, logic),             -- Effect logic
       i(2, "// dependencies"), -- Dependency array
     })
   ),
@@ -92,11 +92,10 @@ local ts_snippets = {
   -- map snippet
   s("map", fmt([[{}.map(() => {});]], { i(1), i(0) })),
   s("cl", fmt("console.log({})", { i(1) })),
-  s("cli", fmt('console.log("aqui")', {})),
   s("tp", fmt("type {} = {{\n {} \n}}", { i(1, "typeName"), i(0, logic) })),
   s("dti", fmt("data-testid='{}'", { i(1, "testId") })),
   s("act", fmt("act(() => {{\n\t{}\n}});", { i(1, logic) })),
-  s("emp", fmt("({}) => {}", { i(1), i(0, logic) })),
+  s("cn", fmt('className="{}"', { i(0) })),
 }
 
 return ts_snippets
