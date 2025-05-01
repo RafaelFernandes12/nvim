@@ -1,22 +1,23 @@
 return {
-	"williamboman/mason.nvim",
-	dependencies = {
-		"williamboman/mason-lspconfig.nvim",
-	},
-	lazy = false,
+  "williamboman/mason.nvim",
+  dependencies = {
+    "williamboman/mason-lspconfig.nvim",
+  },
+  lazy = false,
   config = function()
-		require("mason").setup()
-		local mason_lsp = require("mason-lspconfig")
+    require("mason").setup()
+    local mason_lsp = require("mason-lspconfig")
 
-		mason_lsp.setup({
-			ensure_installed = {
-				"vtsls",
-				"html",
-				"tailwindcss",
-				"lua_ls",
-        'jdtls'
-			},
-			automatic_installation = true,
-		})
-	end,
+    mason_lsp.setup({
+      ensure_installed = {
+        "vtsls",
+        "html",
+        "tailwindcss",
+        "lua_ls",
+        "jdtls",
+        "pyright"
+      },
+      automatic_installation = true,
+    })
+  end,
 }

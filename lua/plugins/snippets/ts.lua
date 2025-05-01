@@ -96,6 +96,8 @@ local ts_snippets = {
   s("dti", fmt("data-testid='{}'", { i(1, "testId") })),
   s("act", fmt("act(() => {{\n\t{}\n}});", { i(1, logic) })),
   s("cn", fmt('className="{}"', { i(0) })),
+  s("ms", fmt('max-sm:{}', { i(0) })),
+  s("md", fmt('max-md:{}', { i(0) })),
 }
 
 return ts_snippets

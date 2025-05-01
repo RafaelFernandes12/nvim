@@ -25,9 +25,9 @@ vim.keymap.set("n", "<leader>rc", ":%s/<C-r><C-w>//gc<Left><Left>", { desc = "Re
 
 keymap("n", "<leader>lI", ":LspInfo<CR>", vim.tbl_extend("force", opts, { desc = "lspInfo" }))
 keymap({ "n", "o", "x" }, "L", "$", { noremap = true, silent = true })
-keymap({ "n", "o", "x" }, "H", "^", vim.tbl_extend("force", opts, { desc = "start of the line" }))
+keymap({ "n", "o", "x" }, "H", "0", vim.tbl_extend("force", opts, { desc = "start of the line" }))
 keymap("n", "<leader>ct", function()
-	vim.fn.system("cat ~/source/token | xclip -selection clipboard") -- For Linux
+  vim.fn.system("cat ~/source/token | xclip -selection clipboard") -- For Linux
 end, { desc = "Copy token to clipboard" })
 keymap("n", "<leader>l", ":cprev<CR>", vim.tbl_extend("force", opts, { desc = "previous instance of quick fix list" }))
 keymap("n", "<leader>ç", ":cnext<CR>", vim.tbl_extend("force", opts, { desc = "next instance of quick fix list" }))
@@ -35,8 +35,8 @@ keymap("n", "<leader>no", ":noh<CR>", vim.tbl_extend("force", opts, { desc = "cl
 
 vim.keymap.set("n", "<leader>m", ":messages<CR>", { noremap = true, silent = true, desc = "messages" }) -- Toggle fold under cursor
 keymap(
-	"n",
-	"<leader>cl",
-	"oconsole.log('aqui');<Esc>:w<CR>",
-	vim.tbl_extend("force", opts, { desc = "console.log('aqui')" })
+  "n",
+  "<leader>cl",
+  "oconsole.log('aqui');<Esc>:w<CR>",
+  vim.tbl_extend("force", opts, { desc = "console.log('aqui')" })
 )

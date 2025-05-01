@@ -35,8 +35,6 @@ return {
         ["<leader>D"] = { "<cmd>Telescope diagnostics bufnr=0<CR>", "Show buffer diagnostics" },
         ["<leader>d"] = { vim.diagnostic.open_float, "Show line diagnostics" },
         ["K"] = { vim.lsp.buf.hover, "Show documentation" },
-        ["<leader>lss"] = { "<cmd>Telescope lsp_document_symbols<CR>", "Show document symbols" }, -- Document symbols
-        ["<leader>lw"] = { "<cmd>Telescope lsp_workspace_symbols<CR>", "Show workspace symbols" }, -- Workspace symbols
       }
 
       for key, mapping in pairs(keymaps) do
