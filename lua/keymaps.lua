@@ -27,8 +27,11 @@ keymap("n", "<leader>lI", ":LspInfo<CR>", vim.tbl_extend("force", opts, { desc =
 keymap({ "n", "o", "x" }, "L", "$", { noremap = true, silent = true })
 keymap({ "n", "o", "x" }, "H", "0", vim.tbl_extend("force", opts, { desc = "start of the line" }))
 keymap("n", "<leader>ct", function()
-  vim.fn.system("cat ~/source/token | xclip -selection clipboard") -- For Linux
+  vim.fn.system("cat ~/source/token | wl-copy") -- For Linux
 end, { desc = "Copy token to clipboard" })
+keymap("n", "<leader>ck", function()
+  vim.fn.system("cat ~/source/key | wl-copy") -- For Linux
+end, { desc = "Copy apiKey to clipboard" })
 keymap("n", "<leader>l", ":cprev<CR>", vim.tbl_extend("force", opts, { desc = "previous instance of quick fix list" }))
 keymap("n", "<leader>ç", ":cnext<CR>", vim.tbl_extend("force", opts, { desc = "next instance of quick fix list" }))
 keymap("n", "<leader>no", ":noh<CR>", vim.tbl_extend("force", opts, { desc = "clean highlight" }))
