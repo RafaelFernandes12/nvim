@@ -11,12 +11,19 @@ local custom_highlights = {
 
 return {
   {
-    -- "folke/tokyonight.nvim",
-    -- lazy = false,
+    "folke/tokyonight.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme("tokyonight-night")
+    end,
+  },
+  {
+    -- "rebelot/kanagawa.nvim",
     -- priority = 1000,
     -- config = function()
-    --   vim.cmd.colorscheme("tokyonight-night")
-    -- end,
+    --   vim.cmd("colorscheme kanagawa-dragon")
+    -- end
   },
   {
     -- "catppuccin/nvim",
@@ -32,31 +39,32 @@ return {
     -- end,
   },
   {
-    "rose-pine/neovim",
-    name = "rose-pine",
-    config = function()
-      require("rose-pine").setup({
-        variant = "moon",
-        palette = {
-          moon = {
-            base = "#000000",
-          },
-        },
-      })
-      vim.cmd("colorscheme rose-pine-moon")
-      vim.api.nvim_set_hl(0, "TelescopeBorder", { --[[ fg = "#000000", ]]
-        bg = "#000000",
-      })
-      vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "#000000" })
-      vim.api.nvim_set_hl(0, "TelescopePromptNormal", { bg = "#000000" })
-      vim.api.nvim_set_hl(0, "TelescopeResultsNormal", { bg = "#000000" })
-      vim.api.nvim_set_hl(0, "TelescopePreviewNormal", { bg = "#000000" })
-
-      -- Override highlight groups for markdown code blocks
-      vim.api.nvim_set_hl(0, "RenderMarkdownBackground", { bg = "#000000" })
-      vim.api.nvim_set_hl(0, "RenderMarkdownCodeBlock", { bg = "#000000", fg = "#ffffff" })
-      vim.api.nvim_set_hl(0, "RenderMarkdownInlineCode", { bg = "#000000", fg = "#ffffff" })
-    end,
+    -- "rose-pine/neovim",
+    -- name = "rose-pine",
+    -- config = function()
+    --   require("rose-pine").setup({
+    --     -- variant = "moon",
+    --     -- palette = {
+    --     --   moon = {
+    --     --     base = "#000000",
+    --     --   },
+    --     -- },
+    --   })
+    --   -- vim.cmd("colorscheme rose-pine-moon")
+    --   vim.cmd("colorscheme rose-pine")
+    --   -- vim.api.nvim_set_hl(0, "TelescopeBorder", { --[[ fg = "#000000", ]]
+    --   --   bg = "#000000",
+    --   -- })
+    --   -- vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "#000000" })
+    --   -- vim.api.nvim_set_hl(0, "TelescopePromptNormal", { bg = "#000000" })
+    --   -- vim.api.nvim_set_hl(0, "TelescopeResultsNormal", { bg = "#000000" })
+    --   -- vim.api.nvim_set_hl(0, "TelescopePreviewNormal", { bg = "#000000" })
+    --   --
+    --   -- -- Override highlight groups for markdown code blocks
+    --   -- vim.api.nvim_set_hl(0, "RenderMarkdownBackground", { bg = "#000000" })
+    --   -- vim.api.nvim_set_hl(0, "RenderMarkdownCodeBlock", { bg = "#000000", fg = "#ffffff" })
+    --   -- vim.api.nvim_set_hl(0, "RenderMarkdownInlineCode", { bg = "#000000", fg = "#ffffff" })
+    -- end,
   },
   {
     -- "bluz71/vim-moonfly-colors",

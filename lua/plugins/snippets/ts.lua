@@ -98,6 +98,16 @@ local ts_snippets = {
   s("cn", fmt('className="{}"', { i(0) })),
   s("ms", fmt('max-sm:{}', { i(0) })),
   s("md", fmt('max-md:{}', { i(0) })),
+  s(
+    "for",
+    fmt('for (let {} = {}; {}; {}) {{\n\t{}\n}}', {
+      i(1, "i"),          -- Iterator variable name
+      i(2, "0"),          -- Initial value
+      i(3, "i < length"), -- Condition
+      i(4, "i++"),        -- Increment
+      i(5, logic),        -- Loop body
+    })
+  ),
 }
 
 return ts_snippets
