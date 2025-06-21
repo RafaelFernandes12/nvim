@@ -29,7 +29,6 @@ return {
     end, { desc = "CopilotChat - Quick chat" }),
 
     keys = {
-
       { "<leader>pp", ":CopilotChatToggle<CR>",   mode = "n", desc = "Explain Code" },
       { "<leader>pe", ":CopilotChatExplain<CR>",  mode = "v", desc = "Explain Code" },
       { "<leader>pr", ":CopilotChatReview<CR>",   mode = "v", desc = "Review Code" },
