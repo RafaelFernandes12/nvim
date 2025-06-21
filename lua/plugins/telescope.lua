@@ -12,10 +12,10 @@ return {
       require("telescope").setup({
         defaults = {
           file_ignore_patterns = {
-            "node_modules", -- This will only ignore node_modules
-            -- Remove any patterns that would ignore dot files
+            "node_modules",
           },
-          hidden = true, -- This will show hidden files (dot files)
+          hidden = true,
+          find_command = { "fd", "--type", "f", "--hidden", "--exclude", "node_modules" },
         },
         extensions = {
           ["ui-select"] = {

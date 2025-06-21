@@ -5,7 +5,7 @@ return {
     { "<leader>ra", desc = "Send all requests" },
     { "<leader>rb", desc = "Open scratchpad" },
   },
-  ft = { "http", "rest" },
+  ft = { "http", "rest", "graphql" },
   opts = {
     global_keymaps = true,
     global_keymaps_prefix = "<leader>r",

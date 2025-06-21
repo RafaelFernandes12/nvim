@@ -16,6 +16,7 @@ vim.opt.splitright = true
 vim.opt.clipboard = "unnamedplus"
 
 vim.o.wrap = false
+vim.o.hidden = true
 
 vim.opt.scrolloff = 999
 

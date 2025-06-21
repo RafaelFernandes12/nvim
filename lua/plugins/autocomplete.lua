@@ -50,8 +50,14 @@ return {
         ["<Enter>"] = cmp.mapping.confirm({ select = false }),
       }),
       window = {
-        completion = cmp.config.window.bordered(),
-        documentation = cmp.config.window.bordered(),
+        completion = cmp.config.window.bordered({
+          border = "rounded",
+          winhighlight = "Normal:CmpNormal,FloatBorder:CmpBorder,CursorLine:CmpSel,Search:None"
+        }),
+        documentation = cmp.config.window.bordered({
+          border = "rounded",
+          winhighlight = "Normal:CmpNormal,FloatBorder:CmpBorder,CursorLine:CmpSel,Search:None"
+        }),
       },
       sources = cmp.config.sources({
         { name = "nvim_lsp" },

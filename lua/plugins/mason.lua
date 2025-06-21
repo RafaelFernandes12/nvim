@@ -15,7 +15,12 @@ return {
         "tailwindcss",
         "lua_ls",
         "jdtls",
-        "pyright"
+        "pyright",
+        "graphql",
+        "eslint_d",
+        "prettier",
+        "cssls",
+        "clangd"
       },
       automatic_installation = true,
     })
