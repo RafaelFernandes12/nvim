@@ -140,3 +140,6 @@ vim.keymap.set("n", "<leader>kc", function()
   float_http_buf = nil
   vim.notify("Floating HTTP buffer cleared", vim.log.levels.INFO)
 end, { desc = "Clear floating HTTP buffer" })
+
+vim.keymap.set('n', '<leader>tc', ':tabclose<CR>', { desc = 'Close current tab' })
+vim.keymap.set('n', '<leader>tt', ':tabnew<CR>', { desc = 'Close current tab' })

@@ -82,7 +82,7 @@ return {
       vim.api.nvim_set_hl(0, "Normal", { bg = "#000000" })
       vim.api.nvim_set_hl(0, "TabLine", { bg = "#000000", fg = "#ffffff" })
       vim.api.nvim_set_hl(0, "TabLineSel", { bg = "#000000", fg = "#f6c177" })
-      vim.api.nvim_set_hl(0, "TabLineFill", { bg = "#000000", fg = "#ffffff" })
+      vim.api.nvim_set_hl(0, "TabLineFill", { bg = "#030a1f", fg = "#ffffff" })
     end,
   },
   {

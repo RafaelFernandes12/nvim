@@ -11,15 +11,11 @@ return {
     mason_lsp.setup({
       ensure_installed = {
         "vtsls",
-        "js-debug-adapter",
         "html",
         "tailwindcss",
         "lua_ls",
         "jdtls",
         "pyright",
-        "graphql",
-        "eslint_d",
-        "prettier",
         "cssls",
         "clangd"
       },
