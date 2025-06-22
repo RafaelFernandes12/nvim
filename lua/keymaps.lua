@@ -8,8 +8,7 @@ keymap("v", "<A-k>", ":m '<-2<CR>gv=gv", vim.tbl_extend("force", opts, { desc = 
 
 keymap("n", "s", ":wa<CR>", { desc = "save" })
 -- keymap("n", "<leader>sa", ":wa<CR>", vim.tbl_extend("force", opts, { desc = "save all" }))
-keymap("n", "q", ":q!<CR>", vim.tbl_extend("force", opts, { desc = "quit" }))
-keymap("n", "Q", "q", vim.tbl_extend("force", opts, { desc = "start macro recording" }))
+keymap("n", "<leader>q", ":q!<CR>", vim.tbl_extend("force", opts, { desc = "quit" }))
 
 keymap("n", "<C-a>", "GVgg", vim.tbl_extend("force", opts, { desc = "select all" }))
 -- Window management keymaps

@@ -11,6 +11,7 @@ return {
     mason_lsp.setup({
       ensure_installed = {
         "vtsls",
+        "js-debug-adapter",
         "html",
         "tailwindcss",
         "lua_ls",

@@ -1,161 +1,131 @@
--- local js_based_languages = {
--- 	"typescript",
--- 	"javascript",
--- 	"typescriptreact",
--- 	"javascriptreact",
--- 	"vue",
--- }
-
 return {
-	-- { "nvim-neotest/nvim-nio" },
-	-- {
-	-- 	"mfussenegger/nvim-dap",
-	-- 	config = function()
-	-- 		local dap = require("dap")
-	--
-	-- 		local Config = require("lazyvim.config")
-	-- 		vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
-	--
-	-- 		for name, sign in pairs(Config.icons.dap) do
-	-- 			sign = type(sign) == "table" and sign or { sign }
-	-- 			vim.fn.sign_define(
-	-- 				"Dap" .. name,
-	-- 				{ text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] }
-	-- 			)
-	-- 		end
-	--
-	-- 		for _, language in ipairs(js_based_languages) do
-	-- 			dap.configurations[language] = {
-	-- 				-- Debug single nodejs files
-	-- 				{
-	-- 					type = "pwa-node",
-	-- 					request = "launch",
-	-- 					name = "Launch file",
-	-- 					program = "${file}",
-	-- 					cwd = vim.fn.getcwd(),
-	-- 					sourceMaps = true,
-	-- 				},
-	-- 				-- Debug nodejs processes (make sure to add --inspect when you run the process)
-	-- 				{
-	-- 					type = "pwa-node",
-	-- 					request = "attach",
-	-- 					name = "Attach",
-	-- 					processId = require("dap.utils").pick_process,
-	-- 					cwd = vim.fn.getcwd(),
-	-- 					sourceMaps = true,
-	-- 				},
-	-- 				-- Debug web applications (client side)
-	-- 				{
-	-- 					type = "pwa-chrome",
-	-- 					request = "launch",
-	-- 					name = "Launch & Debug Chrome",
-	-- 					url = function()
-	-- 						local co = coroutine.running()
-	-- 						return coroutine.create(function()
-	-- 							vim.ui.input({
-	-- 								prompt = "Enter URL: ",
-	-- 								default = "http://localhost:3000",
-	-- 							}, function(url)
-	-- 								if url == nil or url == "" then
-	-- 									return
-	-- 								else
-	-- 									coroutine.resume(co, url)
-	-- 								end
-	-- 							end)
-	-- 						end)
-	-- 					end,
-	-- 					webRoot = vim.fn.getcwd(),
-	-- 					protocol = "inspector",
-	-- 					sourceMaps = true,
-	-- 					userDataDir = false,
-	-- 				},
-	-- 				-- Divider for the launch.json derived configs
-	-- 				{
-	-- 					name = "----- ↓ launch.json configs ↓ -----",
-	-- 					type = "",
-	-- 					request = "launch",
-	-- 				},
-	-- 			}
-	-- 		end
-	-- 	end,
-	-- 	keys = {
-	-- 		{
-	-- 			"<leader>dO",
-	-- 			function()
-	-- 				require("dap").step_out()
-	-- 			end,
-	-- 			desc = "Step Out",
-	-- 		},
-	-- 		{
-	-- 			"<leader>do",
-	-- 			function()
-	-- 				require("dap").step_over()
-	-- 			end,
-	-- 			desc = "Step Over",
-	-- 		},
-	-- 		{
-	-- 			"<leader>da",
-	-- 			function()
-	-- 				if vim.fn.filereadable(".vscode/launch.json") then
-	-- 					local dap_vscode = require("dap.ext.vscode")
-	-- 					dap_vscode.load_launchjs(nil, {
-	-- 						["pwa-node"] = js_based_languages,
-	-- 						["chrome"] = js_based_languages,
-	-- 						["pwa-chrome"] = js_based_languages,
-	-- 					})
-	-- 				end
-	-- 				require("dap").continue()
-	-- 			end,
-	-- 			desc = "Run with Args",
-	-- 		},
-	-- 	},
-	-- 	dependencies = {
-	-- 		-- Install the vscode-js-debug adapter
-	-- 		{
-	-- 			"microsoft/vscode-js-debug",
-	-- 			-- After install, build it and rename the dist directory to out
-	-- 			build = "npm install --legacy-peer-deps --no-save && npx gulp vsDebugServerBundle && rm -rf out && mv dist out",
-	-- 			version = "1.*",
-	-- 		},
-	-- 		{
-	-- 			"mxsdev/nvim-dap-vscode-js",
-	-- 			config = function()
-	-- 				---@diagnostic disable-next-line: missing-fields
-	-- 				require("dap-vscode-js").setup({
-	-- 					-- Path of node executable. Defaults to $NODE_PATH, and then "node"
-	-- 					-- node_path = "node",
-	--
-	-- 					-- Path to vscode-js-debug installation.
-	-- 					debugger_path = vim.fn.resolve(vim.fn.stdpath("data") .. "/lazy/vscode-js-debug"),
-	--
-	-- 					-- Command to use to launch the debug server. Takes precedence over "node_path" and "debugger_path"
-	-- 					-- debugger_cmd = { "js-debug-adapter" },
-	--
-	-- 					-- which adapters to register in nvim-dap
-	-- 					adapters = {
-	-- 						"chrome",
-	-- 						"pwa-node",
-	-- 						"pwa-chrome",
-	-- 						"pwa-msedge",
-	-- 						"pwa-extensionHost",
-	-- 						"node-terminal",
-	-- 					},
-	--
-	-- 					-- Path for file logging
-	-- 					-- log_file_path = "(stdpath cache)/dap_vscode_js.log",
-	--
-	-- 					-- Logging level for output to file. Set to false to disable logging.
-	-- 					-- log_file_level = false,
-	--
-	-- 					-- Logging level for output to console. Set to false to disable console output.
-	-- 					-- log_console_level = vim.log.levels.ERROR,
-	-- 				})
-	-- 			end,
-	-- 		},
-	-- 		{
-	-- 			"Joakker/lua-json5",
-	-- 			build = "./install.sh",
-	-- 		},
-	-- 	},
-	-- },
+  'mfussenegger/nvim-dap',
+  dependencies = {
+    "rcarriga/nvim-dap-ui",
+    "theHamsta/nvim-dap-virtual-text",
+  },
+  config = function()
+    require("nvim-dap-virtual-text").setup({})
+
+    local dap = require("dap")
+
+    dap.adapters["pwa-node"] = {
+      type = "server",
+      host = "localhost",
+      port = 8123,
+      executable = {
+        command = vim.fn.stdpath("data") .. "/mason/bin/js-debug-adapter",
+        args = { "8123" },
+      }
+    }
+
+    for _, language in ipairs { "typescript", "javascript" } do
+      dap.configurations[language] = {
+        {
+          type = "pwa-node",
+          request = "launch",
+          name = "Launch file",
+          program = "${file}",
+          cwd = "${workspaceFolder}",
+          console = "integratedTerminal",
+          runtimeExecutable = "node",
+        },
+        {
+          type = "pwa-node",
+          request = "attach",
+          name = "Attach to process",
+          -- port = 3000,
+          processId = function()
+            local handle = io.popen("ps aux | grep nest")
+            if not handle then
+              print("Failed to run process search command.")
+              return
+            end
+            local pid = handle:read("*l")
+            handle:close()
+            if pid then
+              return tonumber(pid:match("%d+")) -- Extract the PID from the output
+            else
+              return require 'dap.utils'.pick_process()
+            end
+          end,
+          console = "integratedTerminal",
+          cwd = "${workspaceFolder}",
+        }
+      }
+    end
+
+    -- nvim-dap-ui setup
+    local dapui = require("dapui")
+    dapui.setup({
+      layouts = {
+        {
+          elements = {
+            { id = "scopes",  size = 0.5, },
+            { id = "watches", size = 0.5 },
+          },
+          size = 60,
+          position = "right",
+        },
+        {
+          elements = {
+            { id = "console", size = 1.0 },
+          },
+          position = "bottom",
+          size = 10,
+        }
+
+      }
+    })
+
+    -- Open and close dapui automatically
+    dap.listeners.after.event_initialized["dapui_config"] = function()
+      dapui.open()
+    end
+    dap.listeners.before.event_terminated["dapui_config"] = function()
+      dapui.close()
+    end
+    dap.listeners.before.event_exited["dapui_config"] = function()
+      dapui.close()
+    end
+
+
+    -- -- Custom keymaps for nvim-dap
+    -- Auto-attach to a running NestJS process
+    vim.api.nvim_create_user_command("DapAttachNest", function()
+      local handle = io.popen("ps aux | grep nest")
+      if not handle then
+        print("Failed to run process search command.")
+        return
+      end
+      local pid = handle:read("*l")
+      handle:close()
+      if pid then
+        dap.run({
+          type = "pwa-node",
+          request = "attach",
+          name = "Auto Attach to NestJS",
+          processId = tonumber(pid),
+          port = 9229,
+          cwd = vim.fn.getcwd(),
+          console = "integratedTerminal",
+        })
+      else
+        print("No running NestJS process found.")
+      end
+    end, { desc = "DAP: Auto Attach to running NestJS process" })
+
+    vim.fn.sign_define('DapBreakpoint', { text = '●', texthl = 'DiagnosticError', linehl = '', numhl = '' })
+    vim.fn.sign_define('DapBreakpointRejected', { text = '×', texthl = 'DiagnosticWarn', linehl = '', numhl = '' })
+
+    vim.keymap.set('n', '<F1>', function() dap.toggle_breakpoint() end, { desc = "DAP Toggle Breakpoint" })
+    vim.keymap.set('n', '<F2>', function() dap.set_breakpoint(vim.fn.input('Breakpoint condition: ')) end,
+      { desc = "DAP Set Conditional Breakpoint" })
+    vim.keymap.set('n', '<F3>', function() dap.repl.open() end, { desc = "DAP Open REPL" })
+    vim.keymap.set('n', '<F4>', function() dap.run_last() end, { desc = "DAP Run Last" })
+    vim.keymap.set('n', '<F5>', function() dap.continue() end, { desc = "DAP Continue" })
+    vim.keymap.set('n', '<F10>', function() dap.step_over() end, { desc = "DAP Step Over" })
+    vim.keymap.set('n', '<F11>', function() dap.step_into() end, { desc = "DAP Step Into" })
+    vim.keymap.set('n', '<F12>', function() dap.step_out() end, { desc = "DAP Step Out" })
+  end,
 }

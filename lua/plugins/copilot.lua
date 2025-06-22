@@ -38,7 +38,5 @@ return {
       { "<leader>pc", ":CopilotChatCommit<CR>",   mode = "n", desc = "test Code" },
 
     },
-
-    -- Change Copilot reset mapping from <C-l> to <C-o>
   },
 }
