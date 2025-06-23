@@ -17,16 +17,16 @@ return {
 
     local luasnip = require("luasnip")
     local lspkind = require("lspkind")
-
     local kind_formatter = lspkind.cmp_format({
-      mode = "symbol_text",
-      menu = {
-        buffer = "[buf]",
-        nvim_lsp = "[LSP]",
-        nvim_lua = "[api]",
-        path = "[path]",
-        luasnip = "[snip]",
-      },
+      mode = "symbol_text", -- show only symbol annotations
+      maxwidth = 50,
+      -- menu = {
+      --   buffer = "[buf]",
+      --   nvim_lsp = "[LSP]",
+      --   nvim_lua = "[api]",
+      --   path = "[path]",
+      --   luasnip = "[snip]",
+      -- },
     })
 
     require("luasnip.loaders.from_vscode").lazy_load()
@@ -61,9 +61,11 @@ return {
       },
       sources = cmp.config.sources({
         { name = "nvim_lsp" },
-        { name = "luasnip" },
+        -- { name = "luasnip" },
         { name = "buffer" },
         { name = "path" },
+        -- { name = "nvim_lua" },
+        { name = "tailwindcss" },
         -- { name = "codeium" },
       }),
       experimental = { ghost_text = true },
