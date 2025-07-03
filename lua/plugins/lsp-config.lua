@@ -63,6 +63,12 @@ return {
           on_attach = on_attach,
         })
       end,
+      ["graphql"] = function()
+        lspconfig.graphql.setup({
+          capabilities = capabilities,
+          on_attach = on_attach,
+        })
+      end,
       ["lua_ls"] = function()
         lspconfig.lua_ls.setup({
           capabilities = capabilities,

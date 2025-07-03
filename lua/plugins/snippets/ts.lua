@@ -108,6 +108,17 @@ local ts_snippets = {
       i(5, logic),        -- Loop body
     })
   ),
+  s(
+    "pri",
+    fmt("private readonly {}: {},", {
+      f(function(args)
+        local typeName = args[1][1] or ""
+        return typeName:sub(1, 1):lower() .. typeName:sub(2)
+      end, { 1 }),
+      i(1, "TypeName"),
+    })
+  ),
+
 }
 
 return ts_snippets

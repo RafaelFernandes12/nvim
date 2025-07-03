@@ -10,8 +10,11 @@ return {
     global_keymaps = true,
     global_keymaps_prefix = "<leader>r",
     kulala_keymaps_prefix = "",
+    -- lsp = { formatter = true },
     ui = {
-      display_mode = "float",
-    }
+      win_opts = {
+        wo = { number = true, wrap = true }, -- window options
+      },
+    },
   },
 }

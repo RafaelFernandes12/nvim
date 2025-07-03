@@ -7,6 +7,7 @@ return {
   config = function()
     require("nvim-dap-virtual-text").setup({})
 
+    local widgets = require("dap.ui.widgets")
     local dap = require("dap")
 
     dap.adapters["pwa-node"] = {
@@ -67,56 +68,41 @@ return {
           size = 60,
           position = "right",
         },
-        {
-          elements = {
-            { id = "console", size = 1.0 },
-          },
-          position = "bottom",
-          size = 10,
-        }
+        -- {
+        --   elements = {
+        --     { id = "console", size = 1.0 },
+        --   },
+        --   position = "bottom",
+        --   size = 10,
+        -- }
 
       }
     })
 
     -- Open and close dapui automatically
-    dap.listeners.after.event_initialized["dapui_config"] = function()
-      dapui.open()
-    end
-    dap.listeners.before.event_terminated["dapui_config"] = function()
-      dapui.close()
-    end
-    dap.listeners.before.event_exited["dapui_config"] = function()
-      dapui.close()
-    end
+    -- dap.listeners.after.event_initialized["dapui_config"] = function()
+    --   dapui.open()
+    -- end
+    -- dap.listeners.before.event_terminated["dapui_config"] = function()
+    --   dapui.close()
+    -- end
+    -- dap.listeners.before.event_exited["dapui_config"] = function()
+    --   dapui.close()
+    -- end
 
 
     -- -- Custom keymaps for nvim-dap
     -- Auto-attach to a running NestJS process
-    vim.api.nvim_create_user_command("DapAttachNest", function()
-      local handle = io.popen("ps aux | grep nest")
-      if not handle then
-        print("Failed to run process search command.")
-        return
-      end
-      local pid = handle:read("*l")
-      handle:close()
-      if pid then
-        dap.run({
-          type = "pwa-node",
-          request = "attach",
-          name = "Auto Attach to NestJS",
-          processId = tonumber(pid),
-          port = 9229,
-          cwd = vim.fn.getcwd(),
-          console = "integratedTerminal",
-        })
-      else
-        print("No running NestJS process found.")
-      end
-    end, { desc = "DAP: Auto Attach to running NestJS process" })
 
     vim.fn.sign_define('DapBreakpoint', { text = '●', texthl = 'DiagnosticError', linehl = '', numhl = '' })
     vim.fn.sign_define('DapBreakpointRejected', { text = '×', texthl = 'DiagnosticWarn', linehl = '', numhl = '' })
+
+    vim.keymap.set('n', 'P', function() widgets.hover() end, { desc = "DAP Widgets Hover" })
+    vim.keymap.set('n', '<Leader>bp', function() widgets.preview() end, { desc = "DAP Widgets Preview" })
+    vim.keymap.set('n', '<Leader>bf', function() widgets.centered_float(widgets.frames) end,
+      { desc = "DAP Widgets Frames" })
+    vim.keymap.set('n', '<Leader>bs', function() widgets.centered_float(widgets.scopes) end,
+      { desc = "DAP Widgets Scopes" })
 
     vim.keymap.set('n', '<F1>', function() dap.toggle_breakpoint() end, { desc = "DAP Toggle Breakpoint" })
     vim.keymap.set('n', '<F2>', function() dap.set_breakpoint(vim.fn.input('Breakpoint condition: ')) end,

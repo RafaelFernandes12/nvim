@@ -4,6 +4,11 @@ return {
   dependencies = {
     "hrsh7th/cmp-buffer",
     "github/copilot.vim",
+    {
+      "mistweaverco/kulala-cmp-graphql.nvim", -- GraphQL source for nvim-cmp in http files
+      opts = {},
+      ft = "http",
+    },
     "tailwind-tools",
     "onsails/lspkind-nvim",
     "hrsh7th/cmp-path",
@@ -18,7 +23,7 @@ return {
     local luasnip = require("luasnip")
     local lspkind = require("lspkind")
     local kind_formatter = lspkind.cmp_format({
-      mode = "symbol_text", -- show only symbol annotations
+      mode = "symbol", -- show only symbol annotations
       maxwidth = 50,
       -- menu = {
       --   buffer = "[buf]",
@@ -52,11 +57,11 @@ return {
       window = {
         completion = cmp.config.window.bordered({
           border = "rounded",
-          winhighlight = "Normal:CmpNormal,FloatBorder:CmpBorder,CursorLine:CmpSel,Search:None"
+          -- winhighlight = "Normal:CmpNormal,FloatBorder:CmpBorder,CursorLine:CmpSel,Search:None"
         }),
         documentation = cmp.config.window.bordered({
           border = "rounded",
-          winhighlight = "Normal:CmpNormal,FloatBorder:CmpBorder,CursorLine:CmpSel,Search:None"
+          -- winhighlight = "Normal:CmpNormal,FloatBorder:CmpBorder,CursorLine:CmpSel,Search:None"
         }),
       },
       sources = cmp.config.sources({
@@ -70,7 +75,7 @@ return {
       }),
       experimental = { ghost_text = true },
       formatting = {
-        fields = { "abbr", "kind", "menu" },
+        fields = { "kind", "abbr", "menu" },
         expandable_indicator = true,
         format = function(entry, vim_item)
           vim_item = kind_formatter(entry, vim_item)
@@ -83,6 +88,14 @@ return {
         { name = "vim-dadbod-completion" },
         { name = "buffer" },
       },
+    })
+    cmp.setup.filetype("http", {
+      sources = cmp.config.sources({
+        { name = "nvim_lsp" },
+        { name = "kulala-cmp-graphql" },
+        { name = "buffer" },
+        { name = "path" },
+      }),
     })
   end,
 }

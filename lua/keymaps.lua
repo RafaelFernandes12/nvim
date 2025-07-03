@@ -6,14 +6,13 @@ keymap("v", "<A-j>", ":m '>+1<CR>gv=gv", vim.tbl_extend("force", opts, { desc = 
 keymap("n", "<A-k>", ":m .-2<CR>==", vim.tbl_extend("force", opts, { desc = "move line up" }))
 keymap("v", "<A-k>", ":m '<-2<CR>gv=gv", vim.tbl_extend("force", opts, { desc = "move selected lines up" }))
 
-keymap("n", "<leader>s", ":wa<CR>", { desc = "save" })
--- keymap("n", "<leader>sa", ":wa<CR>", vim.tbl_extend("force", opts, { desc = "save all" }))
+keymap("n", "<leader>s", ":w<CR>", vim.tbl_extend("force", opts, { desc = "save" }))
 keymap("n", "<leader>q", ":q!<CR>", vim.tbl_extend("force", opts, { desc = "quit" }))
 
 keymap("n", "<C-a>", "GVgg", vim.tbl_extend("force", opts, { desc = "select all" }))
 -- Window management keymaps
 keymap("n", "<leader>w-", ":split<CR>", vim.tbl_extend("force", opts, { desc = "Split window horizontally" }))
-keymap("n", "<leader>w/", ":vsplit<CR>", vim.tbl_extend("force", opts, { desc = "Split window vertically" }))
+keymap("n", "<leader>wq", ":vsplit<CR>", vim.tbl_extend("force", opts, { desc = "Split window vertically" }))
 keymap("n", "<leader>w=", "<C-w>=", vim.tbl_extend("force", opts, { desc = "Equalize window sizes" }))
 keymap("n", "<C-Right>", ":vertical resize -2<CR>", vim.tbl_extend("force", opts, { desc = "Decrease window width" }))
 keymap("n", "<C-left>", ":vertical resize +2<CR>", vim.tbl_extend("force", opts, { desc = "Increase window width" }))
@@ -95,51 +94,21 @@ end, { desc = "Build & Run TS file" })
 
 local float_http_buf = nil
 
-vim.keymap.set("n", "<leader>kk", function()
-  local function open_float_buf(buf)
-    local width = math.floor(vim.o.columns * 0.95)
-    local height = math.floor(vim.o.lines * 0.9)
-    local opts = {
-      relative = "editor",
-      width = width,
-      height = height,
-      row = math.floor((vim.o.lines - height) / 2),
-      col = math.floor((vim.o.columns - width) / 2),
-      border = "rounded",
-    }
-    vim.api.nvim_open_win(buf, true, opts)
-  end
-
-  if float_http_buf and vim.api.nvim_buf_is_valid(float_http_buf) then
-    open_float_buf(float_http_buf)
-    return
-  end
-
-  local actions = require("telescope.actions")
-  local action_state = require("telescope.actions.state")
-  require("telescope.builtin").find_files({
-    prompt_title = "Open HTTP file in float",
-    cwd = vim.fn.expand("~/source/http"),
-    attach_mappings = function(prompt_bufnr, map)
-      local function open_floating()
-        local selection = action_state.get_selected_entry()
-        actions.close(prompt_bufnr)
-        local filename = vim.fn.expand("~/source/http/" .. selection.value)
-        float_http_buf = vim.fn.bufadd(filename)
-        vim.fn.bufload(float_http_buf)
-        open_float_buf(float_http_buf)
-      end
-      map("i", "<CR>", open_floating)
-      map("n", "<CR>", open_floating)
-      return true
-    end,
-  })
-end, { desc = "Open floating buffer" })
-
-vim.keymap.set("n", "<leader>kc", function()
-  float_http_buf = nil
-  vim.notify("Floating HTTP buffer cleared", vim.log.levels.INFO)
-end, { desc = "Clear floating HTTP buffer" })
 
 vim.keymap.set('n', '<leader>tc', ':tabclose<CR>', { desc = 'Close current tab' })
 vim.keymap.set('n', '<leader>tt', ':tabnew<CR>', { desc = 'Close current tab' })
+
+vim.keymap.set('n', '<leader>cll', function()
+  local word = vim.fn.expand("<cword>")
+  local log = "console.log('" .. word:upper() .. "', " .. word .. ");"
+  vim.fn.setreg('+', log)
+  print("Copied to clipboard: " .. log)
+end, { desc = "Copy console.log of word under cursor" })
+
+vim.keymap.set('n', '<leader>clo', function()
+  local word = vim.fn.expand("<cword>")
+  local cap_word = word:sub(1, 1):upper() .. word:sub(2)
+  local log = "console.log('" .. word:upper() .. "', " .. word .. ");"
+  vim.api.nvim_put({ log }, 'l', true, true)
+  print("Inserted below: " .. log)
+end, { desc = "Insert console.log of word under cursor below" })
