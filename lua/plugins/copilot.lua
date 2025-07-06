@@ -9,23 +9,8 @@ return {
     opts = function()
       local user = vim.env.USER or "User"
       user = user:sub(1, 1):upper() .. user:sub(2)
-      local bufnr = vim.api.nvim_get_current_buf()
-      local line = vim.api.nvim_win_get_cursor(0)[1] - 1 -- 0-indexed
-      local diagnostics = vim.diagnostic.get(bufnr, { lnum = line })
-      local diag_str2 = table.concat(vim.tbl_map(function(d) return d.message end, diagnostics), "\n")
 
       return {
-        -- prompts = {
-        --   -- NewFix = {
-        --   --   prompt = "Fix the select Code, heres the diagnostics: " .. diag_str2,
-        --   --   context = "buffer",
-        --   --   -- selection = select.visual,
-        --   --   system_prompt = 'COPILOT_EXPLAIN',
-        --   --   mappings = {
-        --   --     visual = "<leader>pi",
-        --   --   }
-        --   -- }
-        -- },
         chat_autocomplete = true,
         auto_insert_mode = true,
         question_header = "  " .. user .. " ",
@@ -42,26 +27,52 @@ return {
         },
       }
     end,
-    -- vim.keymap.set('v', '<leader>pi', function()
-    --   local bufnr = vim.api.nvim_get_current_buf()
-    --   local line = vim.api.nvim_win_get_cursor(0)[1] - 1 -- 0-indexed
-    --   local diagnostics = vim.diagnostic.get(bufnr, { lnum = line })
-    --   local diag_str = table.concat(vim.tbl_map(function(d) return d.message end, diagnostics), "\n")
-    --   print(diag_str)
-    --   local selected_text = table.concat(
-    --     vim.api.nvim_buf_get_lines(bufnr, vim.fn.getpos("'<")[2] - 1, vim.fn.getpos("'>")[2], false), "\n")
-    --   local prompt = ""
-    --   if diag_str ~= "" then
-    --     prompt = "Diagnostics:\n" .. diag_str .. "\n"
-    --   end
-    --   prompt = prompt .. "Fix the following code:\n" .. selected_text
-    --   require("CopilotChat").open({
-    --     prompt = prompt,
-    --     context = "buffer",
-    --     system_prompt = 'COPILOT_EXPLAIN',
-    --     insert_mode = true,
-    --   })
-    -- end, { desc = "CopilotChat - Fix selected code with diagnostics" }),
+
+    vim.keymap.set('v', '<leader>pi', function()
+      local chat = require("CopilotChat")
+
+      local start_line = vim.fn.line("v")
+      local end_line = vim.fn.line(".")
+      if start_line > end_line then
+        start_line, end_line = end_line, start_line
+      end
+      local bufnr = vim.api.nvim_get_current_buf()
+      local diagnostics = vim.diagnostic.get(bufnr)
+      local selected_diags = {}
+      for _, d in ipairs(diagnostics) do
+        if d.lnum >= (start_line - 1) and d.lnum <= (end_line - 1) then
+          table.insert(selected_diags, d)
+        end
+      end
+      local diag_str = table.concat(vim.tbl_map(function(d) return d.message end, selected_diags), "\n")
+
+      chat.ask(
+        'Fix the selected code, explain what was wrong and how your changes address the problems, here are the diagnostics' ..
+        diag_str, {
+          context = "buffer",
+          system_prompt = 'COPILOT_EXPLAIN',
+        })
+    end, { desc = "CopilotChat - Fix selected code with diagnostics" }),
+
+    vim.keymap.set('n', '<leader>pc', function()
+      local chat = require("CopilotChat")
+      vim.cmd(":wa")
+      vim.fn.system("git add .")
+      chat.ask(
+        'Write commit message for the change with commitizen convention. Keep the title under 50 characters and wrap message at 72 characters. Format as a gitcommit code block.',
+        {
+          context = "git:staged",
+          selection = false,
+          auto_insert_mode = false,
+          callback = function(response)
+            local cleaned = response:gsub("^```gitcommit\n", ""):gsub("\n```$", "")
+            print("Commit message copied to clipboard.")
+            vim.cmd("git commit -m '" .. cleaned .. "'")
+            -- vim.fn.system("wl-copy", cleaned)
+            vim.cmd("close")
+          end,
+        })
+    end, { desc = "CopilotChat - Fix selected code with diagnostics" }),
 
     vim.keymap.set('n', '<leader>pb', function()
       require("CopilotChat").open({
@@ -70,6 +81,7 @@ return {
         cursor_position = { line = 2, col = 1 },
       })
     end, { desc = "CopilotChat - Open with prefilled text" }),
+
     vim.keymap.set('n', '<leader>pw', function()
       require("CopilotChat").open({
         context = "files",
@@ -85,8 +97,7 @@ return {
       { "<leader>po", ":CopilotChatOptimize<CR>", mode = "v", desc = "Optmize Code" },
       { "<leader>pd", ":CopilotChatDocs<CR>",     mode = "v", desc = "docs Code" },
       { "<leader>pt", ":CopilotChatTests<CR>",    mode = "v", desc = "test Code" },
-      { "<leader>pi", ":CopilotChatFix<CR>",      mode = "v", desc = "Fix Code" },
-      { "<leader>pc", ":CopilotChatCommit<CR>",   mode = "n", desc = "test Code" },
+      -- { "<leader>pc", ":CopilotChatCommit<CR>",   mode = "n", desc = "test Code" },
     }
   },
 }
