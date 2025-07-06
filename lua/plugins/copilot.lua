@@ -11,6 +11,16 @@ return {
       user = user:sub(1, 1):upper() .. user:sub(2)
 
       return {
+        prompts = {
+          AdjustToNest = {
+            prompt = "Adjust this code to nestjs",
+            context = "buffer",
+            system_prompt = 'COPILOT_EXPLAIN',
+            mappings = {
+              visual = "<leader>pn",
+            }
+          }
+        },
         chat_autocomplete = true,
         auto_insert_mode = true,
         question_header = "  " .. user .. " ",
@@ -66,10 +76,9 @@ return {
           auto_insert_mode = false,
           callback = function(response)
             local cleaned = response:gsub("^```gitcommit\n", ""):gsub("\n```$", "")
-            print("Commit message copied to clipboard.")
-            vim.cmd("git commit -m '" .. cleaned .. "'")
-            -- vim.fn.system("wl-copy", cleaned)
+            vim.fn.system({ "git", "commit", "-m", cleaned })
             vim.cmd("close")
+            vim.cmd(":Neogit")
           end,
         })
     end, { desc = "CopilotChat - Fix selected code with diagnostics" }),
@@ -92,12 +101,12 @@ return {
 
 
     keys = {
-      { "<leader>pp", ":CopilotChatToggle<CR>",   mode = "n", desc = "Explain Code" },
-      { "<leader>pe", ":CopilotChatExplain<CR>",  mode = "v", desc = "Explain Code" },
-      { "<leader>po", ":CopilotChatOptimize<CR>", mode = "v", desc = "Optmize Code" },
-      { "<leader>pd", ":CopilotChatDocs<CR>",     mode = "v", desc = "docs Code" },
-      { "<leader>pt", ":CopilotChatTests<CR>",    mode = "v", desc = "test Code" },
-      -- { "<leader>pc", ":CopilotChatCommit<CR>",   mode = "n", desc = "test Code" },
+      { "<leader>pp", ":CopilotChatToggle<CR>",       mode = "n", desc = "Explain Code" },
+      { "<leader>pe", ":CopilotChatExplain<CR>",      mode = "v", desc = "Explain Code" },
+      { "<leader>po", ":CopilotChatOptimize<CR>",     mode = "v", desc = "Optmize Code" },
+      { "<leader>pd", ":CopilotChatDocs<CR>",         mode = "v", desc = "docs Code" },
+      { "<leader>pt", ":CopilotChatTests<CR>",        mode = "v", desc = "test Code" },
+      { "<leader>pn", ":CopilotChatAdjustToNest<CR>", mode = "v", desc = "adjust no nest Code" },
     }
   },
 }

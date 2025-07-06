@@ -6,7 +6,7 @@ return {
   },
   config = function()
     require("nvim-dap-virtual-text").setup({})
-
+    _G.is_debugging = false
     local widgets = require("dap.ui.widgets")
     local dap = require("dap")
 
@@ -80,16 +80,22 @@ return {
     })
 
     -- Open and close dapui automatically
-    -- dap.listeners.after.event_initialized["dapui_config"] = function()
-    --   dapui.open()
-    -- end
-    -- dap.listeners.before.event_terminated["dapui_config"] = function()
-    --   dapui.close()
-    -- end
-    -- dap.listeners.before.event_exited["dapui_config"] = function()
-    --   dapui.close()
-    -- end
+    dap.listeners.after.event_initialized["dapui_config"] = function()
+      -- dapui.close()
+      _G.is_debugging = true
+    end
+    dap.listeners.before.event_terminated["dapui_config"] = function()
+      -- dapui.close()
+      _G.is_debugging = false
+    end
+    dap.listeners.before.event_exited["dapui_config"] = function()
+      -- dapui.close()
+      _G.is_debugging = false
+    end
 
+    function _G.debug_status()
+      return (_G.is_debugging and "🐞 DEBUGGING" or "")
+    end
 
     -- -- Custom keymaps for nvim-dap
     -- Auto-attach to a running NestJS process
@@ -98,17 +104,17 @@ return {
     vim.fn.sign_define('DapBreakpointRejected', { text = '×', texthl = 'DiagnosticWarn', linehl = '', numhl = '' })
 
     vim.keymap.set('n', 'P', function() widgets.hover() end, { desc = "DAP Widgets Hover" })
-    vim.keymap.set('n', '<Leader>bp', function() widgets.preview() end, { desc = "DAP Widgets Preview" })
-    vim.keymap.set('n', '<Leader>bf', function() widgets.centered_float(widgets.frames) end,
+    vim.keymap.set('n', '<F6>', function() widgets.preview() end, { desc = "DAP Widgets Preview" })
+    vim.keymap.set('n', '<F2>', function() widgets.centered_float(widgets.frames) end,
       { desc = "DAP Widgets Frames" })
-    vim.keymap.set('n', '<Leader>bs', function() widgets.centered_float(widgets.scopes) end,
+    vim.keymap.set('n', '<F3>', function() widgets.centered_float(widgets.scopes) end,
       { desc = "DAP Widgets Scopes" })
 
     vim.keymap.set('n', '<F1>', function() dap.toggle_breakpoint() end, { desc = "DAP Toggle Breakpoint" })
-    vim.keymap.set('n', '<F2>', function() dap.set_breakpoint(vim.fn.input('Breakpoint condition: ')) end,
-      { desc = "DAP Set Conditional Breakpoint" })
-    vim.keymap.set('n', '<F3>', function() dap.repl.open() end, { desc = "DAP Open REPL" })
-    vim.keymap.set('n', '<F4>', function() dap.run_last() end, { desc = "DAP Run Last" })
+    -- vim.keymap.set('n', '<F2>', function() dap.set_breakpoint(vim.fn.input('Breakpoint condition: ')) end,
+    --   { desc = "DAP Set Conditional Breakpoint" })
+    -- vim.keymap.set('n', '<F3>', function() dap.repl.open() end, { desc = "DAP Open REPL" })
+    vim.keymap.set('n', '<F4>', function() dap.restart() end, { desc = "DAP restart" })
     vim.keymap.set('n', '<F5>', function() dap.continue() end, { desc = "DAP Continue" })
     vim.keymap.set('n', '<F10>', function() dap.step_over() end, { desc = "DAP Step Over" })
     vim.keymap.set('n', '<F11>', function() dap.step_into() end, { desc = "DAP Step Into" })
