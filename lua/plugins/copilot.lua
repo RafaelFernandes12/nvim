@@ -101,12 +101,12 @@ return {
 
 
     keys = {
-      { "<leader>pp", ":CopilotChatToggle<CR>",       mode = "n", desc = "Explain Code" },
+      { "<leader>pp", ":CopilotChatToggle<CR>",       mode = "n", desc = "Toggle Code" },
       { "<leader>pe", ":CopilotChatExplain<CR>",      mode = "v", desc = "Explain Code" },
       { "<leader>po", ":CopilotChatOptimize<CR>",     mode = "v", desc = "Optmize Code" },
       { "<leader>pd", ":CopilotChatDocs<CR>",         mode = "v", desc = "docs Code" },
       { "<leader>pt", ":CopilotChatTests<CR>",        mode = "v", desc = "test Code" },
-      { "<leader>pn", ":CopilotChatAdjustToNest<CR>", mode = "v", desc = "adjust no nest Code" },
+      { "<leader>pn", ":CopilotChatAdjustToNest<CR>", mode = "v", desc = "adjust to nest Code" },
     }
   },
 }
