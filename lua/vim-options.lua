@@ -13,6 +13,20 @@ vim.opt.relativenumber = true
 vim.g.tmux_navigator_no_mappings = 1
 vim.opt.splitbelow = true
 vim.opt.splitright = true
+
+-- vim.g.clipboard = {
+--   name = "wl-clipboard",
+--   copy = {
+--     ["+"] = "wl-copy",
+--     ["*"] = "wl-copy"
+--   },
+--   paste = {
+--     ["+"] = "wl-paste --no-newline",
+--     ["*"] = "wl-paste --no-newline"
+--   },
+--   cache_enabled = 1
+-- }
+
 vim.opt.clipboard = "unnamedplus"
 
 vim.o.wrap = false

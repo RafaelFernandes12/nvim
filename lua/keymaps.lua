@@ -26,6 +26,7 @@ vim.keymap.set("n", "<leader>rc", ":%s/<C-r><C-w>//gc<Left><Left>", { desc = "Re
 keymap("n", "<leader>lI", ":LspInfo<CR>", vim.tbl_extend("force", opts, { desc = "lspInfo" }))
 keymap({ "n", "o", "x" }, "L", "$", { noremap = true, silent = true })
 keymap({ "n", "o", "x" }, "H", "0", vim.tbl_extend("force", opts, { desc = "start of the line" }))
+keymap({ "n", "o", "x" }, "e", "%", vim.tbl_extend("force", opts, { desc = "start of the line" }))
 keymap("n", "<leader>ct", function()
   vim.fn.system("cat ~/source/token | wl-copy") -- For Linux
 end, { desc = "Copy token to clipboard" })
@@ -97,6 +98,7 @@ local float_http_buf = nil
 
 vim.keymap.set('n', '<leader>tc', ':tabclose<CR>', { desc = 'Close current tab' })
 vim.keymap.set('n', '<leader>tt', ':tabnew<CR>', { desc = 'Close current tab' })
+keymap("n", "gf", ":tabprevious<CR>", vim.tbl_extend("force", opts, { desc = "Go to previous tab" }))
 
 vim.keymap.set('n', '<leader>cll', function()
   local word = vim.fn.expand("<cword>")

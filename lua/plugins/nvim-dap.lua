@@ -13,10 +13,12 @@ return {
     dap.adapters["pwa-node"] = {
       type = "server",
       host = "localhost",
-      port = 8123,
+      -- port = 8123,
+      port = 9229,
       executable = {
         command = vim.fn.stdpath("data") .. "/mason/bin/js-debug-adapter",
-        args = { "8123" },
+        -- args = { "8123" },
+        args = { "9229" },
       }
     }
 
@@ -34,7 +36,7 @@ return {
         {
           type = "pwa-node",
           request = "attach",
-          name = "Attach to process",
+          name = "Attach to nest process",
           -- port = 3000,
           processId = function()
             local handle = io.popen("ps aux | grep nest")
@@ -47,10 +49,17 @@ return {
             if pid then
               return tonumber(pid:match("%d+")) -- Extract the PID from the output
             else
-              return require 'dap.utils'.pick_process()
+              return require 'dap.utils'.pick_process
             end
           end,
           console = "integratedTerminal",
+          cwd = "${workspaceFolder}",
+        },
+        {
+          type = "pwa-node",
+          request = "attach",
+          name = "attach to node process",
+          processId = require 'dap.utils'.pick_process,
           cwd = "${workspaceFolder}",
         }
       }

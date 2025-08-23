@@ -13,7 +13,7 @@ return {
   init = function()
     -- Your DBUI configuration
     vim.g.db_ui_use_nerd_fonts = 1
-    vim.keymap.set('n', '<leader>x', function()
+    vim.keymap.set('n', '<leader>b', function()
       vim.cmd('tabnew | DBUI')
     end, { desc = 'Open Dadbod UI in new tab' })
   end,

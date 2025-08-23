@@ -61,4 +61,7 @@ return {
 			vim.api.nvim_set_keymap("n", "<leader>gdh", ":DiffviewFileHistory<CR>", { noremap = true, silent = true })
 		end,
 	},
+	{
+		'akinsho/git-conflict.nvim', version = "*", config = true
+	}
 }

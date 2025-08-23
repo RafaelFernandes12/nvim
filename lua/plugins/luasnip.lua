@@ -6,17 +6,17 @@ return {
     local ls = require("luasnip")
 
     -- Keymaps for LuaSnip
-    vim.keymap.set({ "i", "s" }, "¹", function()
+    vim.keymap.set({ "i", "s" }, "<F1>", function()
       if ls.expand_or_jumpable() then
         ls.expand_or_jump()
       end
     end, { silent = true })
-    vim.keymap.set({ "i", "s" }, "²", function()
+    vim.keymap.set({ "i", "s" }, "<F2>", function()
       if ls.jumpable(-1) then
         ls.jump(-1)
       end
     end, { silent = true })
-    vim.keymap.set({ "i", "s" }, "³", function()
+    vim.keymap.set({ "i", "s" }, "<F3>", function()
       if ls.choice_active() then
         ls.change_choice(1)
       end
