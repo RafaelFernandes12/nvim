@@ -6,7 +6,8 @@ keymap("v", "<A-j>", ":m '>+1<CR>gv=gv", vim.tbl_extend("force", opts, { desc = 
 keymap("n", "<A-k>", ":m .-2<CR>==", vim.tbl_extend("force", opts, { desc = "move line up" }))
 keymap("v", "<A-k>", ":m '<-2<CR>gv=gv", vim.tbl_extend("force", opts, { desc = "move selected lines up" }))
 
-keymap("n", "<leader>s", ":w<CR>", vim.tbl_extend("force", opts, { desc = "save" }))
+keymap("n", "<leader>ss", ":w!<CR>", vim.tbl_extend("force", opts, { desc = "save" }))
+keymap("n", "<leader>sa", ":wa!<CR>", vim.tbl_extend("force", opts, { desc = "save" }))
 keymap("n", "<leader>q", ":q!<CR>", vim.tbl_extend("force", opts, { desc = "quit" }))
 
 keymap("n", "<C-a>", "GVgg", vim.tbl_extend("force", opts, { desc = "select all" }))
@@ -38,6 +39,7 @@ keymap("n", "<leader>ç", ":cnext<CR>", vim.tbl_extend("force", opts, { desc = "
 keymap("n", "<leader>no", ":noh<CR>", vim.tbl_extend("force", opts, { desc = "clean highlight" }))
 
 vim.keymap.set("x", "p", [["_dP]], { noremap = true, silent = true })
+vim.keymap.set({ "n", "x" }, "c", [["_c]], { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>m", ":messages<CR>", { noremap = true, silent = true, desc = "messages" }) -- Toggle fold under cursor
 

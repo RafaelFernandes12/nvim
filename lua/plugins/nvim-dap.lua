@@ -10,6 +10,7 @@ return {
     local widgets = require("dap.ui.widgets")
     local dap = require("dap")
 
+
     dap.adapters["pwa-node"] = {
       type = "server",
       host = "localhost",
@@ -32,6 +33,17 @@ return {
           cwd = "${workspaceFolder}",
           console = "integratedTerminal",
           runtimeExecutable = "node",
+        },
+        {
+          name = "Debug TS (ts-node-dev)",
+          type = "pwa-node",
+          request = "launch",
+          runtimeExecutable = "ts-node-dev",
+          args = { "--inspect=9229", "--respawn", "--transpile-only", "-r", "tsconfig-paths/register", "${workspaceFolder}/src/server.ts" },
+          cwd = "${workspaceFolder}",
+          envFile = "${workspaceFolder}/.env.dev",
+          skipFiles = { "<node_internals>/**" },
+          sourceMaps = true
         },
         {
           type = "pwa-node",
@@ -58,9 +70,12 @@ return {
         {
           type = "pwa-node",
           request = "attach",
-          name = "attach to node process",
-          processId = require 'dap.utils'.pick_process,
+          name = "Attach to tsx process",
+          port = 9229,
           cwd = "${workspaceFolder}",
+          outFiles = { "${workspaceFolder}/dist/**/*.js" },
+          sourceMaps = true,
+          skipFiles = { "<node_internals>/**" },
         }
       }
     end
