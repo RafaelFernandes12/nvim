@@ -23,6 +23,27 @@ return {
       }
     }
 
+    dap.adapters.codelldb = {
+      type = 'server',
+      -- host = 'localhost',
+      port = "${port}",
+      executable = {
+        command = vim.fn.stdpath("data") .. "/mason/bin/codelldb",
+        args = { "--port", "${port}" },
+      },
+    }
+
+    dap.configurations.cpp = {
+      {
+        name = "Launch file",
+        type = "codelldb",
+        request = "launch",
+        program = "${fileDirname}/${fileBasenameNoExtension}",
+        cwd = '${workspaceFolder}',
+      },
+    }
+
+    dap.configurations.c = dap.configurations.cpp
     for _, language in ipairs { "typescript", "javascript" } do
       dap.configurations[language] = {
         {

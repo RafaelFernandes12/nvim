@@ -27,6 +27,7 @@ vim.opt.splitright = true
 --   cache_enabled = 1
 -- }
 
+-- vim.o.textwidth = 100
 vim.opt.clipboard = "unnamedplus"
 
 vim.o.wrap = false
