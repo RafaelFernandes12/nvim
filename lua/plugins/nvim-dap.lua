@@ -10,6 +10,15 @@ return {
     local widgets = require("dap.ui.widgets")
     local dap = require("dap")
 
+    dap.adapters["pwa-chrome"] = {
+      type = "server",
+      host = "localhost",
+      port = 9222,
+      executable = {
+        command = vim.fn.stdpath("data") .. "/mason/bin/js-debug-adapter",
+        args = { "9222" },
+      }
+    }
 
     dap.adapters["pwa-node"] = {
       type = "server",
@@ -44,8 +53,18 @@ return {
     }
 
     dap.configurations.c = dap.configurations.cpp
-    for _, language in ipairs { "typescript", "javascript" } do
+    for _, language in ipairs { "typescript", "javascript", "typescriptreact" } do
       dap.configurations[language] = {
+        {
+          type = "pwa-chrome",
+          request = "launch",
+          name = "Debug Next.js Client (Chrome)",
+          url = "http://localhost:3000",
+          webRoot = "${workspaceFolder}",
+          protocol = "inspector",
+          sourceMaps = true,
+          skipFiles = { "<node_internals>/**" },
+        },
         {
           type = "pwa-node",
           request = "launch",
@@ -145,6 +164,17 @@ return {
     -- -- Custom keymaps for nvim-dap
     -- Auto-attach to a running NestJS process
 
+    -- vim.api.nvim_create_autocmd("FileType", {
+    --   pattern = "http",
+    --   callback = function()
+    --     vim.keymap.set('n', '<leader>rs', function()
+    --       vim.cmd("KulalaRun")
+    --       if _G.is_debugging then
+    --         vim.cmd("b#")
+    --       end
+    --     end, { buffer = true, desc = "Run HTTP request and return to code if debugging" })
+    --   end
+    -- })
     vim.fn.sign_define('DapBreakpoint', { text = '●', texthl = 'DiagnosticError', linehl = '', numhl = '' })
     vim.fn.sign_define('DapBreakpointRejected', { text = '×', texthl = 'DiagnosticWarn', linehl = '', numhl = '' })
 

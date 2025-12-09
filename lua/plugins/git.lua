@@ -1,36 +1,36 @@
 return {
 	{
-		"kdheepak/lazygit.nvim",
-		lazy = true,
-		cmd = {
-			"LazyGit",
-			"LazyGitConfig",
-			"LazyGitCurrentFile",
-			"LazyGitFilter",
-			"LazyGitFilterCurrentFile",
-		},
-		-- optional for floating window border decoration
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-		},
-		-- setting the keybinding for LazyGit with 'keys' is recommended in
-		-- order to load the plugin when the command is run for the first time
-		keys = {
-			{ "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" }
-		},
-		init = function()
-			vim.g.lazygit_floating_window_winblend = 0
-			vim.g.lazygit_floating_window_use_plenary = 1
-			vim.g.lazygit_use_custom_config_file_path = 0
-			vim.g.lazygit_config = nil
-			-- Map <C-c> to <Esc> in terminal mode for LazyGit
-			vim.api.nvim_create_autocmd("TermOpen", {
-				pattern = "term://*lazygit*",
-				callback = function()
-					vim.api.nvim_buf_set_keymap(0, "t", "<C-c>", "<C-\\><C-n>", { noremap = true, silent = true })
-				end,
-			})
-		end,
+		-- "kdheepak/lazygit.nvim",
+		-- lazy = true,
+		-- cmd = {
+		-- 	"LazyGit",
+		-- 	"LazyGitConfig",
+		-- 	"LazyGitCurrentFile",
+		-- 	"LazyGitFilter",
+		-- 	"LazyGitFilterCurrentFile",
+		-- },
+		-- -- optional for floating window border decoration
+		-- dependencies = {
+		-- 	"nvim-lua/plenary.nvim",
+		-- },
+		-- -- setting the keybinding for LazyGit with 'keys' is recommended in
+		-- -- order to load the plugin when the command is run for the first time
+		-- keys = {
+		-- 	{ "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" }
+		-- },
+		-- init = function()
+		-- 	vim.g.lazygit_floating_window_winblend = 0
+		-- 	vim.g.lazygit_floating_window_use_plenary = 1
+		-- 	vim.g.lazygit_use_custom_config_file_path = 0
+		-- 	vim.g.lazygit_config = nil
+		-- 	-- Map <C-c> to <Esc> in terminal mode for LazyGit
+		-- 	vim.api.nvim_create_autocmd("TermOpen", {
+		-- 		pattern = "term://*lazygit*",
+		-- 		callback = function()
+		-- 			vim.api.nvim_buf_set_keymap(0, "t", "<C-c>", "<C-\\><C-n>", { noremap = true, silent = true })
+		-- 		end,
+		-- 	})
+		-- end,
 
 	},
 

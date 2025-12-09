@@ -69,6 +69,19 @@ return {
           on_attach = on_attach,
         })
       end,
+      ["clangd"] = function()
+        lspconfig.clangd.setup({
+          capabilities = capabilities,
+          on_attach = on_attach,
+          filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto", "h", "hpp" },
+          cmd = {
+            "clangd",
+            "--header-insertion=never",
+            "--query-driver=/usr/bin/g++", -- adjust path if needed
+            "--compile-commands-dir=build" -- adjust if your compile_commands.json is elsewhere
+          },
+        })
+      end,
       ["lua_ls"] = function()
         lspconfig.lua_ls.setup({
           capabilities = capabilities,

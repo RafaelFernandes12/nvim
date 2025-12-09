@@ -38,21 +38,21 @@ keymap("n", "<leader>lI", ":LspInfo<CR>", vim.tbl_extend("force", opts, { desc =
 keymap({ "n", "o", "x" }, "L", "$", { noremap = true, silent = true })
 keymap({ "n", "o", "x" }, "H", "0", vim.tbl_extend("force", opts, { desc = "start of the line" }))
 keymap({ "n", "o", "x" }, "e", "%", vim.tbl_extend("force", opts, { desc = "start of the line" }))
-keymap({ "n", "o", "x" }, "O", "v$h", vim.tbl_extend("force", opts, { desc = "start of the line" }))
+-- keymap({ "n", "o", "x" }, "O", "v$h", vim.tbl_extend("force", opts, { desc = "start of the line" }))
 keymap("n", "<leader>ct", function()
   vim.fn.system("cat ~/source/token | wl-copy") -- For Linux
 end, { desc = "Copy token to clipboard" })
 keymap("n", "<leader>ck", function()
   vim.fn.system("cat ~/source/key | wl-copy") -- For Linux
 end, { desc = "Copy apiKey to clipboard" })
-keymap("n", "<leader>l", ":cprev<CR>", vim.tbl_extend("force", opts, { desc = "previous instance of quick fix list" }))
-keymap("n", "<leader>ç", ":cnext<CR>", vim.tbl_extend("force", opts, { desc = "next instance of quick fix list" }))
+keymap("n", "[k", ":cprev<CR>", vim.tbl_extend("force", opts, { desc = "previous instance of quick fix list" }))
+keymap("n", "]k", ":cnext<CR>", vim.tbl_extend("force", opts, { desc = "next instance of quick fix list" }))
 keymap("n", "<leader>no", ":noh<CR>", vim.tbl_extend("force", opts, { desc = "clean highlight" }))
 
 vim.keymap.set("x", "p", [["_dP]], { noremap = true, silent = true })
 vim.keymap.set({ "n", "x" }, "c", [["_c]], { noremap = true, silent = true })
 
-vim.keymap.set("n", "<leader>m", ":messages<CR>", { noremap = true, silent = true, desc = "messages" }) -- Toggle fold under cursor
+-- vim.keymap.set("n", "<leader>m", ":messages<CR>", { noremap = true, silent = true, desc = "messages" }) -- Toggle fold under cursor
 
 vim.keymap.set('n', '<leader>tb', function()
   local cur_pos = vim.api.nvim_win_get_cursor(0)
@@ -170,6 +170,18 @@ end, { desc = "Copy console.log of word under cursor as whole line" })
 --   vim.fn.setreg('+', log)
 --   print("Copied to clipboard: " .. log)
 -- end, { desc = "Copy console.log of word under cursor" })
+
+vim.keymap.set('n', '<leader>lm', function()
+  local current_path = vim.fn.expand('%:p')
+  local parent_dir = vim.fn.fnamemodify(current_path, ':h:h')
+  local module_files = vim.fn.glob(parent_dir .. '/*.module.ts', false, true)
+  print(module_files)
+  if #module_files > 0 then
+    vim.cmd('vsplit ' .. module_files[1])
+  else
+    print("No module file found in parent directory")
+  end
+end, { desc = "Open module file in parent folder (vertical split)" })
 
 vim.keymap.set('n', '<leader>clo', function()
   local word = vim.fn.expand("<cword>")

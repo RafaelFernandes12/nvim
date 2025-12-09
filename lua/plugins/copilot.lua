@@ -64,6 +64,17 @@ return {
         })
     end, { desc = "CopilotChat - Fix selected code with diagnostics" }),
 
+    vim.keymap.set('n', '<leader>pd', function()
+      local chat = require("CopilotChat")
+      chat.ask(
+        'Add a description for each field of the input, object types and resolvers in the graphql schema in the current buffer. write it in portuguese. Just write the description for graphql, dont bother with other code',
+        {
+          context = "buffer",
+          selection = false,
+          auto_insert_mode = false,
+        })
+    end, { desc = "CopilotChat - write graphql docs" }),
+
     vim.keymap.set('n', '<leader>pc', function()
       local chat = require("CopilotChat")
       vim.cmd(":wa")
@@ -92,6 +103,16 @@ return {
     end, { desc = "CopilotChat - Open with prefilled text" }),
 
     vim.keymap.set('n', '<leader>pw', function()
+      local chat = require("CopilotChat")
+      local buf = vim.api.nvim_get_current_buf()
+      local path = vim.api.nvim_buf_get_name(buf)
+      chat.open({
+        context = "files:" .. path,
+        insert_mode = false,
+      })
+    end, { desc = "CopilotChat - Add file path context" }),
+
+    vim.keymap.set('n', '<leader>pf', function()
       require("CopilotChat").open({
         context = "files",
         insert_mode = true,
@@ -104,7 +125,7 @@ return {
       { "<leader>pp", ":CopilotChatToggle<CR>",       mode = "n", desc = "Toggle Code" },
       { "<leader>pe", ":CopilotChatExplain<CR>",      mode = "v", desc = "Explain Code" },
       { "<leader>po", ":CopilotChatOptimize<CR>",     mode = "v", desc = "Optmize Code" },
-      { "<leader>pd", ":CopilotChatDocs<CR>",         mode = "v", desc = "docs Code" },
+      -- { "<leader>pd", ":CopilotChatDocs<CR>",         mode = "v", desc = "Create docs for the fields, input and object types for graphql, if its a resolver, create docs for the query and mutations" },
       { "<leader>pt", ":CopilotChatTests<CR>",        mode = "v", desc = "test Code" },
       { "<leader>pn", ":CopilotChatAdjustToNest<CR>", mode = "v", desc = "adjust to nest Code" },
     }
