@@ -38,6 +38,9 @@ return {
 
     -- Completion for `blink.cmp`
     dependencies = { "hrsh7th/nvim-cmp" },
+    config = function(_, opts)
+      require("markview").setup(opts)
+    end,
   },
 
   {
