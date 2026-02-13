@@ -1,10 +1,10 @@
-local opts = { noremap = true, silent = true }
+local opts2 = { noremap = true, silent = true }
 local keymap = vim.keymap.set
 
-keymap("n", "<A-j>", ":m .+1<CR>==", vim.tbl_extend("force", opts, { desc = "move line down" }))
-keymap("v", "<A-j>", ":m '>+1<CR>gv=gv", vim.tbl_extend("force", opts, { desc = "move selected lines down" }))
-keymap("n", "<A-k>", ":m .-2<CR>==", vim.tbl_extend("force", opts, { desc = "move line up" }))
-keymap("v", "<A-k>", ":m '<-2<CR>gv=gv", vim.tbl_extend("force", opts, { desc = "move selected lines up" }))
+keymap("n", "<A-j>", ":m .+1<CR>==", vim.tbl_extend("force", opts2, { desc = "move line down" }))
+keymap("v", "<A-j>", ":m '>+1<CR>gv=gv", vim.tbl_extend("force", opts2, { desc = "move selected lines down" }))
+keymap("n", "<A-k>", ":m .-2<CR>==", vim.tbl_extend("force", opts2, { desc = "move line up" }))
+keymap("v", "<A-k>", ":m '<-2<CR>gv=gv", vim.tbl_extend("force", opts2, { desc = "move selected lines up" }))
 vim.keymap.set('n', 'j', 'gj', { noremap = true })
 vim.keymap.set('n', 'k', 'gk', { noremap = true })
 keymap("n", "<leader>wl", function()
@@ -16,38 +16,38 @@ keymap("n", "<leader>wl", function()
     vim.wo.linebreak = true
   end
 end, { desc = "toggle break line" })
-keymap("n", "<leader>ss", ":w!<CR>", vim.tbl_extend("force", opts, { desc = "save" }))
-keymap("n", "<leader>sa", ":wa!<CR>", vim.tbl_extend("force", opts, { desc = "save" }))
-keymap("n", "<leader>q", ":q!<CR>", vim.tbl_extend("force", opts, { desc = "quit" }))
+keymap("n", "<leader>ss", ":w!<CR>", vim.tbl_extend("force", opts2, { desc = "save" }))
+keymap("n", "<leader>sa", ":wa!<CR>", vim.tbl_extend("force", opts2, { desc = "save" }))
+keymap("n", "<leader>q", ":q!<CR>", vim.tbl_extend("force", opts2, { desc = "quit" }))
 
-keymap("n", "<C-a>", "GVgg", vim.tbl_extend("force", opts, { desc = "select all" }))
+keymap("n", "<C-a>", "GVgg", vim.tbl_extend("force", opts2, { desc = "select all" }))
 -- Window management keymaps
-keymap("n", "<leader>w-", ":split<CR>", vim.tbl_extend("force", opts, { desc = "Split window horizontally" }))
-keymap("n", "<leader>wq", ":vsplit<CR>", vim.tbl_extend("force", opts, { desc = "Split window vertically" }))
-keymap("n", "<leader>w=", "<C-w>=", vim.tbl_extend("force", opts, { desc = "Equalize window sizes" }))
-keymap("n", "<C-Right>", ":vertical resize -2<CR>", vim.tbl_extend("force", opts, { desc = "Decrease window width" }))
-keymap("n", "<C-left>", ":vertical resize +2<CR>", vim.tbl_extend("force", opts, { desc = "Increase window width" }))
-keymap("n", "<C-Up>", ":resize +2<CR>", vim.tbl_extend("force", opts, { desc = "Increase window height" }))
-keymap("n", "<C-Down>", ":resize -2<CR>", vim.tbl_extend("force", opts, { desc = "Decrease window height" }))
+keymap("n", "<leader>w-", ":split<CR>", vim.tbl_extend("force", opts2, { desc = "Split window horizontally" }))
+keymap("n", "<leader>wq", ":vsplit<CR>", vim.tbl_extend("force", opts2, { desc = "Split window vertically" }))
+keymap("n", "<leader>w=", "<C-w>=", vim.tbl_extend("force", opts2, { desc = "Equalize window sizes" }))
+keymap("n", "<C-Right>", ":vertical resize -2<CR>", vim.tbl_extend("force", opts2, { desc = "Decrease window width" }))
+keymap("n", "<C-left>", ":vertical resize +2<CR>", vim.tbl_extend("force", opts2, { desc = "Increase window width" }))
+keymap("n", "<C-Up>", ":resize +2<CR>", vim.tbl_extend("force", opts2, { desc = "Increase window height" }))
+keymap("n", "<C-Down>", ":resize -2<CR>", vim.tbl_extend("force", opts2, { desc = "Decrease window height" }))
 
 -- find and replace keymaps
 vim.keymap.set("n", "<leader>rw", ":%s/<C-r><C-w>//g<Left><Left>", { desc = "Replace word under cursor" })
 vim.keymap.set("n", "<leader>rc", ":%s/<C-r><C-w>//gc<Left><Left>", { desc = "Replace word under cursor confirmation" })
 
-keymap("n", "<leader>lI", ":LspInfo<CR>", vim.tbl_extend("force", opts, { desc = "lspInfo" }))
+keymap("n", "<leader>lI", ":LspInfo<CR>", vim.tbl_extend("force", opts2, { desc = "lspInfo" }))
 keymap({ "n", "o", "x" }, "L", "$", { noremap = true, silent = true })
-keymap({ "n", "o", "x" }, "H", "0", vim.tbl_extend("force", opts, { desc = "start of the line" }))
-keymap({ "n", "o", "x" }, "e", "%", vim.tbl_extend("force", opts, { desc = "start of the line" }))
--- keymap({ "n", "o", "x" }, "O", "v$h", vim.tbl_extend("force", opts, { desc = "start of the line" }))
+keymap({ "n", "o", "x" }, "H", "0", vim.tbl_extend("force", opts2, { desc = "start of the line" }))
+keymap({ "n", "o", "x" }, "e", "%", vim.tbl_extend("force", opts2, { desc = "start of the line" }))
+-- keymap({ "n", "o", "x" }, "O", "v$h", vim.tbl_extend("force", opts2, { desc = "start of the line" }))
 keymap("n", "<leader>ct", function()
   vim.fn.system("cat ~/source/token | wl-copy") -- For Linux
 end, { desc = "Copy token to clipboard" })
 keymap("n", "<leader>ck", function()
   vim.fn.system("cat ~/source/key | wl-copy") -- For Linux
 end, { desc = "Copy apiKey to clipboard" })
-keymap("n", "[k", ":cprev<CR>", vim.tbl_extend("force", opts, { desc = "previous instance of quick fix list" }))
-keymap("n", "]k", ":cnext<CR>", vim.tbl_extend("force", opts, { desc = "next instance of quick fix list" }))
-keymap("n", "<leader>no", ":noh<CR>", vim.tbl_extend("force", opts, { desc = "clean highlight" }))
+keymap("n", "[k", ":cprev<CR>", vim.tbl_extend("force", opts2, { desc = "previous instance of quick fix list" }))
+keymap("n", "]k", ":cnext<CR>", vim.tbl_extend("force", opts2, { desc = "next instance of quick fix list" }))
+keymap("n", "<leader>no", ":noh<CR>", vim.tbl_extend("force", opts2, { desc = "clean highlight" }))
 
 vim.keymap.set("x", "p", [["_dP]], { noremap = true, silent = true })
 vim.keymap.set({ "n", "x" }, "c", [["_c]], { noremap = true, silent = true })
@@ -57,7 +57,7 @@ vim.keymap.set({ "n", "x" }, "c", [["_c]], { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>tb', function()
   local cur_pos = vim.api.nvim_win_get_cursor(0)
   local line_count = vim.api.nvim_buf_line_count(0)
-  local pat = "^%s*@token%s*=%s*Bearer%s*"
+  local pat = "^%s*@token2%s*=%s*Bearer%s*"
   for i = 1, line_count do
     local line = vim.api.nvim_buf_get_lines(0, i - 1, i, false)[1]
     local s, e = string.find(line, pat)
@@ -135,7 +135,7 @@ local float_http_buf = nil
 
 vim.keymap.set('n', '<leader>tc', ':tabclose<CR>', { desc = 'Close current tab' })
 vim.keymap.set('n', '<leader>tt', ':tabnew<CR>', { desc = 'Close current tab' })
-keymap("n", "gf", ":tabprevious<CR>", vim.tbl_extend("force", opts, { desc = "Go to previous tab" }))
+keymap("n", "gf", ":tabprevious<CR>", vim.tbl_extend("force", opts2, { desc = "Go to previous tab" }))
 
 
 vim.keymap.set('n', '<leader>clr', function()
@@ -164,13 +164,6 @@ vim.keymap.set('n', '<leader>cll', function()
   print("Copied to clipboard as line: " .. log)
 end, { desc = "Copy console.log of word under cursor as whole line" })
 
--- vim.keymap.set('n', '<leader>cll', function()
---   local word = vim.fn.expand("<cword>")
---   local log = "console.log('" .. word:upper() .. "', " .. word .. ");"
---   vim.fn.setreg('+', log)
---   print("Copied to clipboard: " .. log)
--- end, { desc = "Copy console.log of word under cursor" })
-
 vim.keymap.set('n', '<leader>lm', function()
   local current_path = vim.fn.expand('%:p')
   local parent_dir = vim.fn.fnamemodify(current_path, ':h:h')
@@ -190,3 +183,116 @@ vim.keymap.set('n', '<leader>clo', function()
   vim.api.nvim_put({ log }, 'l', true, true)
   print("Inserted below: " .. log)
 end, { desc = "Insert console.log of word under cursor below" })
+
+vim.keymap.set("n", "<leader>yt", function()
+  vim.cmd("write")
+  local filename = vim.fn.expand('%:t')
+  local js_path = "dist/" .. filename:gsub("%.ts$", ".js")
+  local cmd = "yarn build && node " .. js_path .. "; exec bash"
+  local pane_title = "ts_run_pane"
+
+  -- Find pane with the given title
+  local panes = vim.fn.systemlist("tmux list-panes -a -F '#{pane_id} #{pane_title}'")
+  local target_pane = nil
+  for _, pane in ipairs(panes) do
+    local id, title = pane:match("^(%%?[%d]+) (.*)$")
+    if title == pane_title then
+      target_pane = id
+      break
+    end
+  end
+
+  if not target_pane then
+    -- Create new pane and set its title
+    target_pane = vim.fn.system("tmux split-window -h -P -F '#{pane_id}'")
+    target_pane = target_pane:gsub("\n", "")
+    vim.fn.system("tmux select-pane -t " .. target_pane .. " -T " .. pane_title)
+  end
+
+  -- Send the command to the target pane
+  vim.fn.system("tmux send-keys -t " .. target_pane .. " '" .. cmd .. "' C-m")
+end, { desc = "run ts file in reusable tmux pane" })
+
+keymap("n", "<leader>yc", function()
+  local clipboard_content = vim.fn.getreg('+')
+  local lines = vim.split(clipboard_content, '\n')
+  table.insert(lines, 1, '```js')
+  table.insert(lines, '```')
+  vim.api.nvim_put(lines, 'l', true, true)
+  vim.api.nvim_win_set_cursor(0, { vim.api.nvim_win_get_cursor(0)[1] + 1, 0 })
+end, vim.tbl_extend("force", opts2, { desc = "add js code in md file" }))
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+  callback = function(ev)
+    -- Buffer local mappings.
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    local opts = { buffer = ev.buf, silent = true }
+
+    -- set keybinds
+    opts.desc = "Show LSP references"
+    keymap("n", "<leader>lr", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
+
+    -- opts.desc = "Go to declaration"
+    -- keymap("n", "ld", vim.lsp.buf.declaration, opts) -- go to declaration
+
+    opts.desc = "Show LSP definition"
+    keymap("n", "<leader>ld", vim.lsp.buf.definition, opts) -- show lsp definition
+
+    opts.desc = "Show LSP implementations"
+    keymap("n", "<leader>li", "<cmd>Telescope lsp_implementations<CR>", opts) -- show lsp implementations
+
+    opts.desc = "Show LSP type definitions"
+    keymap("n", "<leader>lt", "<cmd>Telescope lsp_type_definitions<CR>", opts) -- show lsp type definitions
+
+    opts.desc = "See available code actions"
+    keymap({ "n", "v" }, "<leader>lc", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
+
+    opts.desc = "Smart rename"
+    keymap("n", "<leader>lsr", vim.lsp.buf.rename, opts) -- smart rename
+
+    opts.desc = "Show buffer diagnostics"
+    keymap("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show  diagnostics for file
+
+    opts.desc = "Show line diagnostics"
+    keymap("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
+
+    opts.desc = "Go to previous diagnostic"
+    keymap("n", "[d", function()
+      vim.diagnostic.jump({ count = -1, float = true })
+    end, opts) -- jump to previous diagnostic in buffer
+    --
+    opts.desc = "Go to next diagnostic"
+    keymap("n", "]d", function()
+      vim.diagnostic.jump({ count = 1, float = true })
+    end, opts) -- jump to next diagnostic in buffer
+
+    opts.desc = "Show documentation for what is under cursor"
+    keymap("n", "K", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
+
+    -- opts.desc = "Restart LSP"
+    -- keymap("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
+  end,
+})
+
+vim.lsp.inlay_hint.enable(true)
+
+local severity = vim.diagnostic.severity
+
+vim.diagnostic.config({
+  signs = {
+    text = {
+      [severity.ERROR] = " ",
+      [severity.WARN] = " ",
+      [severity.HINT] = "󰠠 ",
+      [severity.INFO] = " ",
+    },
+  },
+})
+
+vim.api.nvim_create_autocmd("TermOpen", {
+  pattern = "term://*toggleterm#2*",
+  callback = function(args)
+    vim.keymap.set("t", "<Esc>", "<Esc>", { buffer = args.buf, noremap = true, nowait = true })
+  end,
+})

@@ -9,7 +9,6 @@ return {
     { "folke/neodev.nvim",                   opts = {} },
   },
   config = function()
-    local lspconfig = require("lspconfig")
     local mason = require("mason")
     local mason_lspconfig = require("mason-lspconfig")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
@@ -22,7 +21,7 @@ return {
     local capabilities = cmp_nvim_lsp.default_capabilities()
 
     -- Shared on_attach function for all servers
-    local function on_attach(client, bufnr)
+    local function on_attach(_, bufnr)
       -- Key mappings for LSP functionality
       local opts = { buffer = bufnr, silent = true }
       local keymaps = {
@@ -43,62 +42,102 @@ return {
       end
     end
 
-    -- Setup LSP servers
-    mason_lspconfig.setup_handlers({
-      function(server_name)
-        lspconfig[server_name].setup({
-          capabilities = capabilities,
-          on_attach = on_attach,
-        })
-      end,
-      ["vtsls"] = function()
-        lspconfig.vtsls.setup({
-          capabilities = capabilities,
-          on_attach = on_attach,
-        })
-      end,
-      ["html"] = function()
-        lspconfig.html.setup({
-          capabilities = capabilities,
-          on_attach = on_attach,
-        })
-      end,
-      ["graphql"] = function()
-        lspconfig.graphql.setup({
-          capabilities = capabilities,
-          on_attach = on_attach,
-        })
-      end,
-      ["clangd"] = function()
-        lspconfig.clangd.setup({
-          capabilities = capabilities,
-          on_attach = on_attach,
-          filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto", "h", "hpp" },
-          cmd = {
-            "clangd",
-            "--header-insertion=never",
-            "--query-driver=/usr/bin/g++", -- adjust path if needed
-            "--compile-commands-dir=build" -- adjust if your compile_commands.json is elsewhere
-          },
-        })
-      end,
-      ["lua_ls"] = function()
-        lspconfig.lua_ls.setup({
-          capabilities = capabilities,
-          on_attach = on_attach,
-          settings = {
-            Lua = {
-              diagnostics = {
-                globals = { "vim" },
-              },
-              workspace = {
-                library = vim.api.nvim_get_runtime_file("", true),
-              },
-              telemetry = { enable = false },
+    -- Default configs for known servers (add more as needed)
+    local server_configs = {
+      clangd = {
+        cmd = {
+          "clangd",
+          "--header-insertion=never",
+          "--query-driver=/usr/bin/g++",
+          "--compile-commands-dir=build"
+        },
+        filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto", "h", "hpp" },
+        root_dir = vim.fn.getcwd,
+      },
+      cssls = {
+        cmd = { "vscode-css-language-server", "--stdio" },
+        filetypes = { "css", "scss", "less" },
+        root_dir = vim.fn.getcwd,
+      },
+      graphql = {
+        cmd = { "graphql-lsp", "server", "-m", "stream" },
+        filetypes = { "graphql", "typescriptreact", "javascriptreact" },
+        root_dir = vim.fn.getcwd,
+      },
+      html = {
+        cmd = { "vscode-html-language-server", "--stdio" },
+        filetypes = { "html" },
+        root_dir = vim.fn.getcwd,
+      },
+      lua_ls = {
+        cmd = { "lua-language-server" },
+        filetypes = { "lua" },
+        root_dir = vim.fn.getcwd,
+        settings = {
+          Lua = {
+            diagnostics = {
+              globals = { "vim" },
             },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+            },
+            telemetry = { enable = false },
           },
+        },
+      },
+      prismals = {
+        cmd = { "prisma-language-server", "--stdio" },
+        filetypes = { "prisma" },
+        root_dir = vim.fn.getcwd,
+      },
+      pyright = {
+        cmd = { "pyright-langserver", "--stdio" },
+        filetypes = { "python" },
+        root_dir = vim.fn.getcwd,
+      },
+      tailwindcss = {
+        cmd = { "tailwindcss-language-server", "--stdio" },
+        filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact" },
+        root_dir = vim.fn.getcwd,
+      },
+      vtsls = {
+        cmd = { "vtsls", "--stdio" },
+        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact" },
+        root_dir = vim.fn.getcwd,
+      },
+      marksman = {
+        cmd = { "marksman", "server" },
+        filetypes = { "markdown", "markdown.mdx" },
+        root_dir = vim.fn.getcwd,
+      },
+    }
+
+    -- Start all installed servers with their configs
+    local servers = mason_lspconfig.get_installed_servers()
+    for server, config in pairs(server_configs) do
+      config.capabilities = capabilities
+      config.on_attach = on_attach
+      config.name = server
+      for _, ft in ipairs(config.filetypes or {}) do
+        vim.api.nvim_create_autocmd("FileType", {
+          pattern = ft,
+          callback = function(args)
+            -- Prevent duplicate clients
+            local bufnr = args.buf
+            local active = false
+            for _, client in pairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
+              if client.name == server then
+                active = true
+                break
+              end
+            end
+            if not active then
+              vim.lsp.start(vim.tbl_deep_extend("force", config, { root_dir = vim.fn.getcwd() }))
+            end
+          end,
+          group = vim.api.nvim_create_augroup("LspStart_" .. server, { clear = true }),
         })
-      end,
-    })
+      end
+    end
   end,
 }

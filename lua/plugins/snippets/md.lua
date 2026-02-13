@@ -14,6 +14,13 @@ local md_snippets = {
 			i(0, logic),
 		})
 	),
+
+	s(
+		"js",
+		fmt("```js\n{}\n```", {
+			i(0, logic),
+		})
+	),
 	s(
 		"tsx",
 		fmt("```tsx\n{}\n```", {

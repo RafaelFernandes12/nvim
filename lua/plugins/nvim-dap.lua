@@ -75,15 +75,12 @@ return {
           runtimeExecutable = "node",
         },
         {
-          name = "Debug TS (ts-node-dev)",
-          type = "pwa-node",
-          request = "launch",
-          runtimeExecutable = "ts-node-dev",
-          args = { "--inspect=9229", "--respawn", "--transpile-only", "-r", "tsconfig-paths/register", "${workspaceFolder}/src/server.ts" },
-          cwd = "${workspaceFolder}",
-          envFile = "${workspaceFolder}/.env.dev",
-          skipFiles = { "<node_internals>/**" },
-          sourceMaps = true
+          type = 'pwa-node',
+          request = 'attach',
+          name = 'Attach to Server',
+          port = 9229,
+          restart = true,
+          protocol = 'inspector'
         },
         {
           type = "pwa-node",
@@ -107,16 +104,16 @@ return {
           console = "integratedTerminal",
           cwd = "${workspaceFolder}",
         },
-        {
-          type = "pwa-node",
-          request = "attach",
-          name = "Attach to tsx process",
-          port = 9229,
-          cwd = "${workspaceFolder}",
-          outFiles = { "${workspaceFolder}/dist/**/*.js" },
-          sourceMaps = true,
-          skipFiles = { "<node_internals>/**" },
-        }
+        -- {
+        --   type = "pwa-node",
+        --   request = "attach",
+        --   name = "Attach to tsx process",
+        --   port = 9229,
+        --   cwd = "${workspaceFolder}",
+        --   outFiles = { "${workspaceFolder}/dist/**/*.js" },
+        --   sourceMaps = true,
+        --   skipFiles = { "<node_internals>/**" },
+        -- }
       }
     end
 
@@ -126,34 +123,26 @@ return {
       layouts = {
         {
           elements = {
-            { id = "scopes",  size = 0.5, },
+            { id = "scopes",  size = 0.5 },
             { id = "watches", size = 0.5 },
           },
           size = 60,
           position = "right",
         },
-        -- {
-        --   elements = {
-        --     { id = "console", size = 1.0 },
-        --   },
-        --   position = "bottom",
-        --   size = 10,
-        -- }
-
       }
     })
 
     -- Open and close dapui automatically
     dap.listeners.after.event_initialized["dapui_config"] = function()
-      -- dapui.close()
+      dapui.open()
       _G.is_debugging = true
     end
     dap.listeners.before.event_terminated["dapui_config"] = function()
-      -- dapui.close()
+      dapui.close()
       _G.is_debugging = false
     end
     dap.listeners.before.event_exited["dapui_config"] = function()
-      -- dapui.close()
+      dapui.close()
       _G.is_debugging = false
     end
 

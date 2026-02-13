@@ -16,17 +16,28 @@ return {
       end)
     end, { noremap = true, silent = true })
 
-    -- Keymap for switching to float direction
-    vim.keymap.set("n", "<C-n>", function()
-      vim.cmd("ToggleTerm 2")
+    -- -- Keymap for switching to float direction
+    -- vim.keymap.set("n", "<C-n>", function()
+    --   vim.cmd("ToggleTerm 2")
+    -- end, { noremap = true, silent = true })
+    --
+    -- vim.keymap.set("t", "<C-n>", function()
+    --   vim.schedule(function()
+    --     vim.cmd("ToggleTerm 2")
+    --   end)
+    -- end, { noremap = true, silent = true })
+
+    vim.keymap.set("n", "<C-o>", function()
+      vim.cmd("ToggleTerm 3")
     end, { noremap = true, silent = true })
 
-    vim.keymap.set("t", "<C-n>", function()
+    vim.keymap.set("t", "<C-o>", function()
       vim.schedule(function()
-        vim.cmd("ToggleTerm 2")
+        vim.cmd("ToggleTerm 3")
       end)
     end, { noremap = true, silent = true })
 
     vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { noremap = true, silent = true })
   end,
+
 }

@@ -1,3 +1,5 @@
+local opts = { noremap = true, silent = true }
+local keymap = vim.keymap.set
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
 	vim.fn.system({
@@ -14,3 +16,5 @@ vim.opt.rtp:prepend(lazypath)
 require("vim-options")
 require("keymaps")
 require("lazy").setup("plugins")
+
+keymap("n", "<C-a>", "GVgg", vim.tbl_extend("force", opts, { desc = "select all" }))

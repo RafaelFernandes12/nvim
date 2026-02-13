@@ -14,13 +14,18 @@ return {
         prompts = {
           AdjustToNest = {
             prompt = "Adjust this code to nestjs",
-            context = "buffer",
+            resources = "buffer",
             system_prompt = 'COPILOT_EXPLAIN',
+            callback = function(response)
+              vim.notify("Adjusted to NestJS: " .. response:sub(1, 50) .. "...")
+            end,
             mappings = {
               visual = "<leader>pn",
             }
           }
+
         },
+
         chat_autocomplete = true,
         auto_insert_mode = true,
         question_header = "  " .. user .. " ",
@@ -59,7 +64,7 @@ return {
       chat.ask(
         'Fix the selected code, explain what was wrong and how your changes address the problems, here are the diagnostics' ..
         diag_str, {
-          context = "buffer",
+          resources = "buffer",
           system_prompt = 'COPILOT_EXPLAIN',
         })
     end, { desc = "CopilotChat - Fix selected code with diagnostics" }),
@@ -69,7 +74,7 @@ return {
       chat.ask(
         'Add a description for each field of the input, object types and resolvers in the graphql schema in the current buffer. write it in portuguese. Just write the description for graphql, dont bother with other code',
         {
-          context = "buffer",
+          resources = "buffer",
           selection = false,
           auto_insert_mode = false,
         })
@@ -82,11 +87,13 @@ return {
       chat.ask(
         'Write commit message for the change with commitizen convention. Keep the title under 50 characters and wrap message at 72 characters. Format as a gitcommit code block.',
         {
-          context = "git:staged",
+          resources = {
+            'gitdiff:staged',
+          },
           selection = false,
           auto_insert_mode = false,
           callback = function(response)
-            local cleaned = response:gsub("^```gitcommit\n", ""):gsub("\n```$", "")
+            local cleaned = response.content:gsub("^```gitcommit\n", ""):gsub("\n```$", "")
             vim.fn.system({ "git", "commit", "-m", cleaned })
             vim.cmd("close")
             vim.cmd(":Neogit")
@@ -96,7 +103,7 @@ return {
 
     vim.keymap.set('n', '<leader>pb', function()
       require("CopilotChat").open({
-        context = "buffer",
+        resources = "buffer",
         insert_mode = true,
         cursor_position = { line = 2, col = 1 },
       })
@@ -107,14 +114,14 @@ return {
       local buf = vim.api.nvim_get_current_buf()
       local path = vim.api.nvim_buf_get_name(buf)
       chat.open({
-        context = "files:" .. path,
+        resources = "files:" .. path,
         insert_mode = false,
       })
     end, { desc = "CopilotChat - Add file path context" }),
 
     vim.keymap.set('n', '<leader>pf', function()
       require("CopilotChat").open({
-        context = "files",
+        resources = "files",
         insert_mode = true,
         cursor_position = { line = 2, col = 1 },
       })
@@ -124,6 +131,7 @@ return {
     keys = {
       { "<leader>pp", ":CopilotChatToggle<CR>",       mode = "n", desc = "Toggle Code" },
       { "<leader>pe", ":CopilotChatExplain<CR>",      mode = "v", desc = "Explain Code" },
+      -- { "<leader>pc", ":CopilotChatCommit<CR>",      mode = "v", desc = "Explain Code" },
       { "<leader>po", ":CopilotChatOptimize<CR>",     mode = "v", desc = "Optmize Code" },
       -- { "<leader>pd", ":CopilotChatDocs<CR>",         mode = "v", desc = "Create docs for the fields, input and object types for graphql, if its a resolver, create docs for the query and mutations" },
       { "<leader>pt", ":CopilotChatTests<CR>",        mode = "v", desc = "test Code" },

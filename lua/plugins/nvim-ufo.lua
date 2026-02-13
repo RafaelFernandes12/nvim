@@ -8,6 +8,9 @@ return {
     -- Setup ufo plugin
     require("ufo").setup({
       provider_selector = function(bufnr, filetype, buftype)
+        if filetype == "markdown" then
+          return { "treesitter", "indent" }
+        end
         return { "lsp", "indent" }
       end,
     })

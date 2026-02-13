@@ -47,10 +47,10 @@ return {
         vim.fn.system(
           "tmux split-window -h 'cd ~/.config/nvim && nvim +\"Telescope find_files cwd=~/.config/nvim\"'"
         )
-      end, { desc = "Open tmux split and Telescope in ~/source/repos/notes" })
-      -- vim.keymap.set("n", "<leader>nn", function()
-      --   vim.fn.system("tmux split-window -h 'cd ~/source/repos/notes && nvim' ")
-      -- end, { desc = "Open tmux split and Telescope in ~/source/repos/notes" })
+      end, { desc = "Open tmux split and Telescope in ~/source/notes" })
+      vim.keymap.set("n", "<leader>nn", function()
+        vim.fn.system("tmux split-window -h 'cd ~/source/notes && nvim' ")
+      end, { desc = "Open tmux split and Telescope in ~/source/notes" })
 
       require("telescope").load_extension("ui-select")
     end,

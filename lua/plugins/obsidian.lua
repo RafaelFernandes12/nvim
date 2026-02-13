@@ -1,30 +1,53 @@
 return {
-  "epwalsh/obsidian.nvim",
-  version = "*", -- recommended, use latest release instead of latest commit
-  lazy = true,
-  ft = "markdown",
-  -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
-  -- event = {
-  --   -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
-  --   -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/*.md"
-  --   -- refer to `:h file-pattern` for more examples
-  --   "BufReadPre path/to/my-vault/*.md",
-  --   "BufNewFile path/to/my-vault/*.md",
+  -- "epwalsh/obsidian.nvim",
+  -- version = "*", -- recommended, use latest release instead of latest commit
+  -- lazy = true,
+  -- ft = "markdown",
+  -- -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
+  -- -- event = {
+  -- --   -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
+  -- --   -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/*.md"
+  -- --   -- refer to `:h file-pattern` for more examples
+  -- --   "BufReadPre path/to/my-vault/*.md",
+  -- --   "BufNewFile path/to/my-vault/*.md",
+  -- -- },
+  -- dependencies = {
+  --   -- Required.
+  --   "nvim-lua/plenary.nvim",
+  --
+  --   -- see below for full list of optional dependencies 👇
   -- },
-  dependencies = {
-    -- Required.
-    "nvim-lua/plenary.nvim",
-
-    -- see below for full list of optional dependencies 👇
-  },
-  opts = {
-    workspaces = {
-      {
-        name = "personal",
-        path = "~/source/notes/obsidian",
-      },
-    },
-
-    -- see below for full list of options 👇
-  },
+  --
+  -- opts = {
+  --   -- ui = {
+  --   --   enable = true,
+  --   -- },
+  --   templates = {
+  --     folder = "templates", -- relative to your vault ro
+  --   },
+  --   disable_frontmatter = true,
+  --   workspaces = {
+  --     {
+  --       name = "notes",
+  --       path = "~/source/notes",
+  --     },
+  --   },
+  --
+  --   -- vim.keymap.set("n", "<leader>oo", ":ObsidianOpen<CR>", { desc = "Obsidian: Open note" }),
+  --   -- vim.keymap.set("n", "<leader>on", ":ObsidianNew<CR>", { desc = "Obsidian: New note" }),
+  --   -- vim.keymap.set("n", "<leader>of", ":ObsidianFollowLink<CR>", { desc = "Obsidian: Follow link" }),
+  --   -- vim.keymap.set("n", "<leader>ob", ":ObsidianBacklinks<CR>", { desc = "Obsidian: Backlinks" }),
+  --   -- vim.keymap.set("n", "<leader>ot", ":ObsidianTags<CR>", { desc = "Obsidian: Tags" }),
+  --   -- vim.keymap.set("n", "<leader>op", ":ObsidianTemplate<CR>", { desc = "Obsidian: Insert template" }),
+  --   -- vim.keymap.set("v", "<leader>ol", ":ObsidianLink<CR>", { desc = "Obsidian: Link selection" }),
+  --   -- vim.keymap.set("v", "<leader>oL", ":ObsidianLinkNew<CR>", { desc = "Obsidian: Link new note from selection" }),
+  --   -- vim.keymap.set("n", "<leader>ok", ":ObsidianLinks<CR>", { desc = "Obsidian: List links" }),
+  --   -- vim.keymap.set("v", "<leader>oe", ":ObsidianExtractNote<CR>", { desc = "Obsidian: Extract note from selection" }),
+  --   -- vim.keymap.set("n", "<leader>oi", ":ObsidianPasteImg<CR>", { desc = "Obsidian: Paste image" }),
+  --   -- vim.keymap.set("n", "<leader>or", ":ObsidianRename<CR>", { desc = "Obsidian: Rename note" }),
+  --   -- vim.keymap.set("n", "<leader>ox", ":ObsidianToggleCheckbox<CR>", { desc = "Obsidian: Toggle checkbox" }),
+  --   -- vim.keymap.set("n", "<leader>ot", ":ObsidianNewFromTemplate<CR>", { desc = "Obsidian: New from template" }),
+  --   -- vim.keymap.set("n", "<leader>oc", ":ObsidianTOC<CR>", { desc = "Obsidian: Table of contents" }),
+  --   -- see below for full list of options 👇
+  -- },
 }

@@ -2,6 +2,7 @@ return {
   "williamboman/mason.nvim",
   dependencies = {
     "williamboman/mason-lspconfig.nvim",
+    "neovim/nvim-lspconfig",
   },
   lazy = false,
   config = function()
@@ -11,6 +12,7 @@ return {
     mason_lsp.setup({
       ensure_installed = {
         "vtsls",
+        -- "ts_ls",
         "html",
         "tailwindcss",
         "lua_ls",

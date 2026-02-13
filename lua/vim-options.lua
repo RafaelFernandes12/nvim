@@ -14,31 +14,19 @@ vim.g.tmux_navigator_no_mappings = 1
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
--- vim.g.clipboard = {
---   name = "wl-clipboard",
---   copy = {
---     ["+"] = "wl-copy",
---     ["*"] = "wl-copy"
---   },
---   paste = {
---     ["+"] = "wl-paste --no-newline",
---     ["*"] = "wl-paste --no-newline"
---   },
---   cache_enabled = 1
--- }
-
--- vim.o.textwidth = 100
 vim.opt.clipboard = "unnamedplus"
 
 vim.o.wrap = false
 vim.o.hidden = true
 
 vim.opt.scrolloff = 999
-
+vim.opt.conceallevel = 1
 vim.o.foldcolumn = "0"
 vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
+-- views can only be fully collapsed with the global statusline
+vim.opt.laststatus = 3
 
--- vim.opt.spell = true
--- vim.opt.spelllang = "en,pt"
+vim.wo.foldmethod = "expr"
+vim.wo.foldexpr = "getline(v:lnum)=~'^#' ? '>' . len(matchstr(getline(v:lnum), '^#*')) : '='"
