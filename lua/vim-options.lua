@@ -18,6 +18,7 @@ vim.opt.clipboard = "unnamedplus"
 
 vim.o.wrap = false
 vim.o.hidden = true
+vim.o.swapfile = false
 
 vim.opt.scrolloff = 999
 vim.opt.conceallevel = 1
@@ -30,3 +31,9 @@ vim.opt.laststatus = 3
 
 vim.wo.foldmethod = "expr"
 vim.wo.foldexpr = "getline(v:lnum)=~'^#' ? '>' . len(matchstr(getline(v:lnum), '^#*')) : '='"
+
+vim.g.opencode_toggleterm = {
+  port = 12345,
+  cmd = "opencode --port 12345",
+  auto_reload = true,
+}

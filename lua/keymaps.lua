@@ -294,5 +294,6 @@ vim.api.nvim_create_autocmd("TermOpen", {
   pattern = "term://*toggleterm#2*",
   callback = function(args)
     vim.keymap.set("t", "<Esc>", "<Esc>", { buffer = args.buf, noremap = true, nowait = true })
+    vim.keymap.set("t", "<C-v>", "<C-\\><C-n>", { buffer = args.buf, noremap = true, nowait = true })
   end,
 })
