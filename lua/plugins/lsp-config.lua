@@ -20,6 +20,25 @@ return {
     -- Shared capabilities for all LSP servers
     local capabilities = cmp_nvim_lsp.default_capabilities()
 
+    local function cwd_root()
+      return vim.fn.getcwd()
+    end
+
+    local function go_root(bufnr)
+      local path = vim.api.nvim_buf_get_name(bufnr)
+      local root = path ~= "" and vim.fs.root(path, { "go.work", "go.mod", ".git" }) or nil
+
+      return root or cwd_root()
+    end
+
+    local function resolve_root_dir(root_dir, bufnr)
+      if type(root_dir) == "function" then
+        return root_dir(bufnr)
+      end
+
+      return root_dir or cwd_root()
+    end
+
     -- Shared on_attach function for all servers
     local function on_attach(_, bufnr)
       -- Key mappings for LSP functionality
@@ -52,27 +71,43 @@ return {
           "--compile-commands-dir=build"
         },
         filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto", "h", "hpp" },
-        root_dir = vim.fn.getcwd,
+        root_dir = cwd_root,
       },
       cssls = {
         cmd = { "vscode-css-language-server", "--stdio" },
         filetypes = { "css", "scss", "less" },
-        root_dir = vim.fn.getcwd,
+        root_dir = cwd_root,
+      },
+      gopls = {
+        cmd = { "gopls" },
+        filetypes = { "go", "gomod", "gowork", "gotmpl" },
+        root_dir = go_root,
+        settings = {
+          gopls = {
+            analyses = {
+              unusedparams = true,
+            },
+            completeUnimported = true,
+            gofumpt = true,
+            staticcheck = true,
+            usePlaceholders = true,
+          },
+        },
       },
       graphql = {
         cmd = { "graphql-lsp", "server", "-m", "stream" },
         filetypes = { "graphql", "typescriptreact", "javascriptreact" },
-        root_dir = vim.fn.getcwd,
+        root_dir = cwd_root,
       },
       html = {
         cmd = { "vscode-html-language-server", "--stdio" },
         filetypes = { "html" },
-        root_dir = vim.fn.getcwd,
+        root_dir = cwd_root,
       },
       lua_ls = {
         cmd = { "lua-language-server" },
         filetypes = { "lua" },
-        root_dir = vim.fn.getcwd,
+        root_dir = cwd_root,
         settings = {
           Lua = {
             diagnostics = {
@@ -88,32 +123,31 @@ return {
       prismals = {
         cmd = { "prisma-language-server", "--stdio" },
         filetypes = { "prisma" },
-        root_dir = vim.fn.getcwd,
+        root_dir = cwd_root,
       },
       pyright = {
         cmd = { "pyright-langserver", "--stdio" },
         filetypes = { "python" },
-        root_dir = vim.fn.getcwd,
+        root_dir = cwd_root,
       },
       tailwindcss = {
         cmd = { "tailwindcss-language-server", "--stdio" },
         filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact" },
-        root_dir = vim.fn.getcwd,
+        root_dir = cwd_root,
       },
       vtsls = {
         cmd = { "vtsls", "--stdio" },
         filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact" },
-        root_dir = vim.fn.getcwd,
+        root_dir = cwd_root,
       },
       marksman = {
         cmd = { "marksman", "server" },
         filetypes = { "markdown", "markdown.mdx" },
-        root_dir = vim.fn.getcwd,
+        root_dir = cwd_root,
       },
     }
 
     -- Start all installed servers with their configs
-    local servers = mason_lspconfig.get_installed_servers()
     for server, config in pairs(server_configs) do
       config.capabilities = capabilities
       config.on_attach = on_attach
@@ -132,7 +166,9 @@ return {
               end
             end
             if not active then
-              vim.lsp.start(vim.tbl_deep_extend("force", config, { root_dir = vim.fn.getcwd() }))
+              vim.lsp.start(vim.tbl_deep_extend("force", config, {
+                root_dir = resolve_root_dir(config.root_dir, bufnr),
+              }))
             end
           end,
           group = vim.api.nvim_create_augroup("LspStart_" .. server, { clear = true }),

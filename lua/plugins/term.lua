@@ -3,13 +3,16 @@ return {
   version = "*",
   config = function()
     require("toggleterm").setup({
+      -- direction = "vertical",
       direction = "float",
+      -- size = vim.o.columns / 3,
+
     })
 
     local opencode = require("opencode-toggleterm").setup()
 
     vim.keymap.set("n", "<C-p>", function()
-      vim.cmd("ToggleTerm 1")
+      vim.cmd("ToggleTerm 1 direction=float")
     end, { noremap = true, silent = true })
 
     vim.keymap.set("t", "<C-p>", function()
@@ -27,7 +30,7 @@ return {
     end, { noremap = true, silent = true })
 
     vim.keymap.set("n", "<C-o>", function()
-      vim.cmd("ToggleTerm 3")
+      vim.cmd("ToggleTerm 3 direction=float")
     end, { noremap = true, silent = true })
 
     vim.keymap.set("t", "<C-o>", function()

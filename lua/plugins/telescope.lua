@@ -9,13 +9,38 @@ return {
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     },
     config = function()
-      require("telescope").setup({
+      local telescope = require("telescope")
+      local telescope_config = require("telescope.config")
+      local vimgrep_arguments = { unpack(telescope_config.values.vimgrep_arguments) }
+
+      vim.list_extend(vimgrep_arguments, {
+        "--hidden",
+        "--no-ignore",
+        "--glob",
+        "!.git/*",
+      })
+
+      telescope.setup({
         defaults = {
+          vimgrep_arguments = vimgrep_arguments,
           file_ignore_patterns = {
             "node_modules",
+            "target"
           },
           hidden = true,
-          find_command = { "fd", "--type", "f", "--hidden", "--exclude", "node_modules" },
+          find_command = {
+            "fd",
+            "--type",
+            "f",
+            "--hidden",
+            "--no-ignore",
+            "--exclude",
+            ".git",
+            "--exclude",
+            "node_modules",
+            "--exclude",
+            "target",
+          },
         },
         extensions = {
           ["ui-select"] = {
@@ -24,7 +49,26 @@ return {
         },
       })
       local builtin = require("telescope.builtin")
-      vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
+      vim.keymap.set("n", "<leader>ff", function()
+        builtin.find_files({
+          hidden = true,
+          no_ignore = true,
+          no_ignore_parent = true,
+          find_command = {
+            "fd",
+            "--type",
+            "f",
+            "--hidden",
+            "--no-ignore",
+            "--exclude",
+            ".git",
+            "--exclude",
+            "node_modules",
+            "--exclude",
+            "target",
+          },
+        })
+      end, { desc = "Telescope find files" })
       vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "Telescope find keymaps" })
       vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
       vim.keymap.set("n", "<leader>fr", function()
@@ -52,7 +96,7 @@ return {
         vim.fn.system("tmux split-window -h 'cd ~/source/notes && nvim' ")
       end, { desc = "Open tmux split and Telescope in ~/source/notes" })
 
-      require("telescope").load_extension("ui-select")
+      telescope.load_extension("ui-select")
     end,
   },
 }

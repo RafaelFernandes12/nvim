@@ -1,5 +1,6 @@
 local opts2 = { noremap = true, silent = true }
 local keymap = vim.keymap.set
+local lsp_enabled = true
 
 keymap("n", "<A-j>", ":m .+1<CR>==", vim.tbl_extend("force", opts2, { desc = "move line down" }))
 keymap("v", "<A-j>", ":m '>+1<CR>gv=gv", vim.tbl_extend("force", opts2, { desc = "move selected lines down" }))
@@ -35,6 +36,15 @@ vim.keymap.set("n", "<leader>rw", ":%s/<C-r><C-w>//g<Left><Left>", { desc = "Rep
 vim.keymap.set("n", "<leader>rc", ":%s/<C-r><C-w>//gc<Left><Left>", { desc = "Replace word under cursor confirmation" })
 
 keymap("n", "<leader>lI", ":LspInfo<CR>", vim.tbl_extend("force", opts2, { desc = "lspInfo" }))
+keymap("n", "<leader>ll", function()
+  if lsp_enabled then
+    vim.cmd("LspStop")
+  else
+    vim.cmd("LspStart")
+  end
+
+  lsp_enabled = not lsp_enabled
+end, vim.tbl_extend("force", opts2, { desc = "toggle lsp" }))
 keymap({ "n", "o", "x" }, "L", "$", { noremap = true, silent = true })
 keymap({ "n", "o", "x" }, "H", "0", vim.tbl_extend("force", opts2, { desc = "start of the line" }))
 keymap({ "n", "o", "x" }, "e", "%", vim.tbl_extend("force", opts2, { desc = "start of the line" }))
@@ -137,6 +147,65 @@ vim.keymap.set('n', '<leader>tc', ':tabclose<CR>', { desc = 'Close current tab' 
 vim.keymap.set('n', '<leader>tt', ':tabnew<CR>', { desc = 'Close current tab' })
 keymap("n", "gf", ":tabprevious<CR>", vim.tbl_extend("force", opts2, { desc = "Go to previous tab" }))
 
+local function detect_project_language()
+  local current_file = vim.api.nvim_buf_get_name(0)
+  local start_path = current_file ~= "" and vim.fs.dirname(current_file) or vim.loop.cwd()
+
+  local node_markers = {
+    "package.json",
+    "yarn.lock",
+    "pnpm-lock.yaml",
+    "package-lock.json",
+    "bun.lock",
+    "bun.lockb",
+  }
+
+  local java_markers = {
+    "pom.xml",
+    "build.gradle",
+    "build.gradle.kts",
+    "settings.gradle",
+    "settings.gradle.kts",
+    "gradlew",
+    "mvnw",
+  }
+
+  local node_marker = vim.fs.find(node_markers, { path = start_path, upward = true })[1]
+  local java_marker = vim.fs.find(java_markers, { path = start_path, upward = true })[1]
+
+  if vim.bo.filetype == "java" then
+    return "java"
+  end
+
+  if java_marker and not node_marker then
+    return "java"
+  end
+
+  if node_marker and not java_marker then
+    return "node"
+  end
+
+  return "node"
+end
+
+local function build_debug_log(message, word)
+  local project_language = detect_project_language()
+
+  if project_language == "java" then
+    if word then
+      return "System.out.println(\"" .. message .. ": \" + " .. word .. ");"
+    end
+
+    return "System.out.println(\"" .. message .. "\");"
+  end
+
+  if word then
+    return "console.log('" .. message .. "', " .. word .. ");"
+  end
+
+  return "console.log('" .. message .. "');"
+end
+
 
 vim.keymap.set('n', '<leader>clr', function()
   local messages = {
@@ -152,17 +221,17 @@ vim.keymap.set('n', '<leader>clr', function()
     "LOGANDO"
   }
   local idx = math.random(#messages)
-  local log = "console.log('" .. messages[idx] .. "');"
+  local log = build_debug_log(messages[idx])
   vim.api.nvim_put({ log }, 'l', true, true)
   print("Inserted below: " .. log)
-end, { desc = "Insert console.log with random chosen uppercase message below" })
+end, { desc = "Insert project-aware debug log below" })
 
 vim.keymap.set('n', '<leader>cll', function()
   local word = vim.fn.expand("<cword>")
-  local log = "console.log('" .. word:upper() .. "', " .. word .. ");"
+  local log = build_debug_log(word:upper(), word)
   vim.fn.setreg('+', log .. "\n")
   print("Copied to clipboard as line: " .. log)
-end, { desc = "Copy console.log of word under cursor as whole line" })
+end, { desc = "Copy project-aware debug log for word" })
 
 vim.keymap.set('n', '<leader>lm', function()
   local current_path = vim.fn.expand('%:p')
@@ -178,11 +247,10 @@ end, { desc = "Open module file in parent folder (vertical split)" })
 
 vim.keymap.set('n', '<leader>clo', function()
   local word = vim.fn.expand("<cword>")
-  local cap_word = word:sub(1, 1):upper() .. word:sub(2)
-  local log = "console.log('" .. word:upper() .. "', " .. word .. ");"
+  local log = build_debug_log(word:upper(), word)
   vim.api.nvim_put({ log }, 'l', true, true)
   print("Inserted below: " .. log)
-end, { desc = "Insert console.log of word under cursor below" })
+end, { desc = "Insert project-aware debug log for word" })
 
 vim.keymap.set("n", "<leader>yt", function()
   vim.cmd("write")
@@ -221,6 +289,109 @@ keymap("n", "<leader>yc", function()
   vim.api.nvim_put(lines, 'l', true, true)
   vim.api.nvim_win_set_cursor(0, { vim.api.nvim_win_get_cursor(0)[1] + 1, 0 })
 end, vim.tbl_extend("force", opts2, { desc = "add js code in md file" }))
+
+local function create_markdown_list(bufnr, start_line, end_line)
+  local lines = vim.api.nvim_buf_get_lines(bufnr, start_line - 1, end_line, false)
+
+  for i, line in ipairs(lines) do
+    lines[i] = line:gsub("^(%s*)", "%1- ", 1)
+  end
+
+  vim.api.nvim_buf_set_lines(bufnr, start_line - 1, end_line, false, lines)
+end
+
+local function get_markdown_list_parts(line)
+  local indent, marker, spacing, content = line:match("^(%s*)([-*+])(%s+)(.*)$")
+
+  if not marker then
+    return nil
+  end
+
+  return {
+    indent = indent,
+    marker = marker,
+    spacing = spacing,
+    content = content,
+    prefix = indent .. marker .. spacing,
+  }
+end
+
+local function markdown_list_enter()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local win = vim.api.nvim_get_current_win()
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local line = vim.api.nvim_get_current_line()
+  local parts = get_markdown_list_parts(line)
+
+  if not parts then
+    return vim.api.nvim_replace_termcodes("<CR>", true, true, true)
+  end
+
+  if col < #parts.prefix then
+    return vim.api.nvim_replace_termcodes("<CR>", true, true, true)
+  end
+
+  if parts.content:match("^%s*$") then
+    vim.schedule(function()
+      if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_win_is_valid(win) then
+        return
+      end
+
+      vim.api.nvim_buf_set_lines(bufnr, row - 1, row, false, { parts.indent })
+      vim.api.nvim_win_set_cursor(win, { row, #parts.indent })
+    end)
+
+    return ""
+  end
+
+  return vim.api.nvim_replace_termcodes("<CR>" .. parts.marker .. parts.spacing, true, true, true)
+end
+
+local function markdown_list_open_below()
+  local parts = get_markdown_list_parts(vim.api.nvim_get_current_line())
+
+  if not parts then
+    return "o"
+  end
+
+  return "o" .. parts.marker .. parts.spacing
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("MarkdownListKeymaps", {}),
+  pattern = { "markdown", "markdown.mdx" },
+  callback = function(ev)
+    keymap("n", "<leader>mb", function()
+      local current_line = vim.api.nvim_win_get_cursor(0)[1]
+      create_markdown_list(ev.buf, current_line, current_line)
+    end, vim.tbl_extend("force", opts2, { buffer = ev.buf, desc = "Create markdown list item" }))
+
+    keymap("x", "<leader>mb", function()
+      local start_line = vim.fn.line("'<")
+      local end_line = vim.fn.line("'>")
+
+      if start_line > end_line then
+        start_line, end_line = end_line, start_line
+      end
+
+      create_markdown_list(ev.buf, start_line, end_line)
+    end, vim.tbl_extend("force", opts2, { buffer = ev.buf, desc = "Create markdown list from selection" }))
+
+    keymap("i", "<CR>", function()
+      local ok, cmp = pcall(require, "cmp")
+      if ok and cmp.visible() and cmp.get_selected_entry() then
+        cmp.confirm({ select = false })
+        return ""
+      end
+
+      return markdown_list_enter()
+    end, { buffer = ev.buf, expr = true, silent = true, desc = "Continue markdown list" })
+
+    keymap("n", "o", function()
+      return markdown_list_open_below()
+    end, { buffer = ev.buf, expr = true, silent = true, desc = "Open markdown list item below" })
+  end,
+})
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("UserLspConfig", {}),
@@ -290,10 +461,9 @@ vim.diagnostic.config({
   },
 })
 
-vim.api.nvim_create_autocmd("TermOpen", {
-  pattern = "term://*toggleterm#2*",
-  callback = function(args)
-    vim.keymap.set("t", "<Esc>", "<Esc>", { buffer = args.buf, noremap = true, nowait = true })
-    vim.keymap.set("t", "<C-v>", "<C-\\><C-n>", { buffer = args.buf, noremap = true, nowait = true })
-  end,
-})
+-- vim.api.nvim_create_autocmd("TermOpen", {
+--   pattern = "term://*toggleterm#2*",
+--   callback = function(args)
+--     vim.keymap.set("t", "<Esc>", "<Esc>", { buffer = args.buf, noremap = true, nowait = true })
+--   end,
+-- })

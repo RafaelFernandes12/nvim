@@ -10,6 +10,14 @@ return {
     local widgets = require("dap.ui.widgets")
     local dap = require("dap")
 
+    local function resolve_executable(name)
+      if vim.fn.executable(name) == 1 then
+        return vim.fn.exepath(name)
+      end
+
+      return vim.fn.stdpath("data") .. "/mason/bin/" .. name
+    end
+
     dap.adapters["pwa-chrome"] = {
       type = "server",
       host = "localhost",
@@ -42,6 +50,15 @@ return {
       },
     }
 
+    dap.adapters.go = {
+      type = "server",
+      port = "${port}",
+      executable = {
+        command = resolve_executable("dlv"),
+        args = { "dap", "-l", "127.0.0.1:${port}" },
+      },
+    }
+
     dap.configurations.cpp = {
       {
         name = "Launch file",
@@ -53,6 +70,46 @@ return {
     }
 
     dap.configurations.c = dap.configurations.cpp
+    dap.configurations.go = {
+      {
+        type = "go",
+        name = "Debug file",
+        request = "launch",
+        program = "${file}",
+        cwd = "${workspaceFolder}",
+      },
+      {
+        type = "go",
+        name = "Debug package",
+        request = "launch",
+        program = "${workspaceFolder}",
+        cwd = "${workspaceFolder}",
+      },
+      {
+        type = "go",
+        name = "Debug test file",
+        request = "launch",
+        mode = "test",
+        program = "${file}",
+        cwd = "${workspaceFolder}",
+      },
+      {
+        type = "go",
+        name = "Debug test package",
+        request = "launch",
+        mode = "test",
+        program = "${workspaceFolder}",
+        cwd = "${workspaceFolder}",
+      },
+      {
+        type = "go",
+        name = "Attach to process",
+        request = "attach",
+        processId = require("dap.utils").pick_process,
+        cwd = "${workspaceFolder}",
+      },
+    }
+
     for _, language in ipairs { "typescript", "javascript", "typescriptreact" } do
       dap.configurations[language] = {
         {

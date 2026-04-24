@@ -6,21 +6,26 @@ return {
   },
   lazy = false,
   config = function()
-    require("mason").setup()
+    local mason = require("mason")
     local mason_lsp = require("mason-lspconfig")
 
+    local lsp_servers = {
+      "vtsls",
+      -- "ts_ls",
+      "html",
+      "tailwindcss",
+      "lua_ls",
+      "jdtls",
+      "pyright",
+      "cssls",
+      "clangd",
+      "gopls",
+    }
+
+    mason.setup()
+
     mason_lsp.setup({
-      ensure_installed = {
-        "vtsls",
-        -- "ts_ls",
-        "html",
-        "tailwindcss",
-        "lua_ls",
-        "jdtls",
-        "pyright",
-        "cssls",
-        "clangd"
-      },
+      ensure_installed = lsp_servers,
       automatic_installation = true,
     })
   end,

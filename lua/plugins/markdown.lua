@@ -6,6 +6,53 @@ local conf = require("telescope.config").values
 local template_dir = vim.fn.expand("~/source/notes/templates")
 local note_dir = vim.fn.expand("~/source/notes/src")
 local tag_dir = vim.fn.expand("~/source/notes/tags")
+
+local function list_files(dir)
+  if vim.fn.isdirectory(dir) ~= 1 then
+    return {}
+  end
+
+  local files = {}
+  for _, name in ipairs(vim.fn.readdir(dir)) do
+    local full_path = dir .. "/" .. name
+    if vim.fn.filereadable(full_path) == 1 then
+      table.insert(files, name)
+    end
+  end
+  table.sort(files)
+  return files
+end
+
+local function collect_tags_from_notes()
+  local tag_to_notes = {}
+
+  for _, note in ipairs(list_files(note_dir)) do
+    if note:match("%.md$") then
+      local note_path = note_dir .. "/" .. note
+      local fd = io.open(note_path, "r")
+      if fd then
+        for line in fd:lines() do
+          for tag in line:gmatch("tags/([^/%?#)]+)%.md") do
+            if not tag_to_notes[tag] then
+              tag_to_notes[tag] = {}
+            end
+            tag_to_notes[tag][note] = true
+          end
+        end
+        fd:close()
+      end
+    end
+  end
+
+  local tags = {}
+  for tag, _ in pairs(tag_to_notes) do
+    table.insert(tags, tag)
+  end
+  table.sort(tags)
+
+  return tags, tag_to_notes
+end
+
 return {
   {
     "iamcco/markdown-preview.nvim",
@@ -67,6 +114,102 @@ return {
         end,
       }):find()
     end, { noremap = true, silent = true, desc = "Insert markdown tag link" }),
+
+    vim.keymap.set("n", "<leader>ms", function()
+      local tags, tag_to_notes = collect_tags_from_notes()
+      if vim.tbl_isempty(tags) then
+        vim.notify("No tags found via tags/<name>.md links in notes", vim.log.levels.WARN)
+        return
+      end
+
+      pickers.new({}, {
+        prompt_title = "Select tag(s) from notes (all selected tags)",
+        finder = finders.new_table({ results = tags }),
+        sorter = conf.generic_sorter({}),
+        attach_mappings = function(prompt_bufnr)
+          actions.select_default:replace(function()
+            local picker = action_state.get_current_picker(prompt_bufnr)
+            local selected_entries = picker:get_multi_selection()
+            if vim.tbl_isempty(selected_entries) then
+              local selected = action_state.get_selected_entry()
+              if selected then
+                selected_entries = { selected }
+              end
+            end
+
+            actions.close(prompt_bufnr)
+
+            if vim.tbl_isempty(selected_entries) then
+              return
+            end
+
+            local selected_tags = {}
+            for _, entry in ipairs(selected_entries) do
+              local tag = entry.value or entry[1]
+              if tag then
+                selected_tags[tag] = true
+              end
+            end
+
+            local selected_tag_list = {}
+            for tag, _ in pairs(selected_tags) do
+              table.insert(selected_tag_list, tag)
+            end
+
+            local note_counts = {}
+            for _, tag in ipairs(selected_tag_list) do
+              local notes = tag_to_notes[tag] or {}
+              for note, _ in pairs(notes) do
+                note_counts[note] = (note_counts[note] or 0) + 1
+              end
+            end
+
+            local matching_notes = {}
+            for note, count in pairs(note_counts) do
+              if count == #selected_tag_list then
+                table.insert(matching_notes, note)
+              end
+            end
+            table.sort(matching_notes)
+
+            if vim.tbl_isempty(matching_notes) then
+              vim.notify("No notes found for selected tag(s)", vim.log.levels.INFO)
+              return
+            end
+
+            pickers.new({}, {
+              prompt_title = "Tagged notes in src",
+              finder = finders.new_table({
+                results = matching_notes,
+                entry_maker = function(note)
+                  local path = note_dir .. "/" .. note
+                  return {
+                    value = path,
+                    display = note,
+                    ordinal = note,
+                    path = path,
+                    filename = path,
+                  }
+                end,
+              }),
+              previewer = conf.file_previewer({}),
+              sorter = conf.generic_sorter({}),
+              attach_mappings = function(notes_prompt_bufnr)
+                actions.select_default:replace(function()
+                  actions.close(notes_prompt_bufnr)
+                  local note_entry = action_state.get_selected_entry()
+                  if note_entry and note_entry.value then
+                    vim.cmd("edit " .. vim.fn.fnameescape(note_entry.value))
+                  end
+                end)
+                return true
+              end,
+            }):find()
+          end)
+          return true
+        end,
+      }):find()
+    end, { noremap = true, silent = true, desc = "Browse src notes by tag" }),
 
     vim.keymap.set("n", "<leader>mn", function()
       -- Only include files (not directories) in the template list

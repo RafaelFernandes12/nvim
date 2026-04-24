@@ -16,6 +16,7 @@ return {
           javascriptreact = { "prettier" },
           typescriptreact = { "prettier" },
           css = { "eslint_d" },
+          go = { "goimports", "gofumpt" },
           html = { "eslint_d" },
           json = { "eslint_d" },
           markdown = { "mdformat" },
