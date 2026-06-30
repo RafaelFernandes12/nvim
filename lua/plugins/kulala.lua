@@ -10,6 +10,12 @@ return {
     global_keymaps = true,
     global_keymaps_prefix = "<leader>r",
     kulala_keymaps_prefix = "",
+    -- Free up <C-h>/<C-l> in the response buffer so they keep doing window
+    -- navigation instead of kulala's "Previous tab"/"Next tab".
+    kulala_keymaps = {
+      ["Previous tab"] = false,
+      ["Next tab"] = false,
+    },
     -- lsp = { formatter = true },
     ui = {
       -- Default is 32768 (32KB). Increase so large JSON shows in the UI.

@@ -446,6 +446,34 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
+vim.keymap.set("x", "<leader>cq", function()
+  local start_line = vim.fn.line("'<")
+  local end_line = vim.fn.line("'>")
+  if start_line > end_line then
+    start_line, end_line = end_line, start_line
+  end
+  -- exit visual mode so the marks are set
+  vim.cmd("normal! \27")
+
+  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+  local file_path = vim.fn.expand("%:p")
+
+  vim.ui.input({ prompt = "Question: " }, function(answer)
+    if not answer then
+      return
+    end
+    local out = {}
+    table.insert(out, "File: " .. file_path .. " (lines " .. start_line .. "-" .. end_line .. ")")
+    table.insert(out, "Answer: " .. answer)
+    table.insert(out, "")
+    for _, line in ipairs(lines) do
+      table.insert(out, line)
+    end
+    vim.fn.setreg("+", table.concat(out, "\n"))
+    print("Copied to clipboard")
+  end)
+end, { desc = "Ask question and copy selection + path + answer to clipboard" })
+
 vim.lsp.inlay_hint.enable(true)
 
 local severity = vim.diagnostic.severity

@@ -25,17 +25,25 @@ return {
           python = { "isort", "black" },
           http = {}
         },
-        format_on_save = {
-          timeout_ms = 1000,
-          lsp_fallback = true,
-          -- filter = function(bufnr)
-          --   return vim.bo[bufnr].filetype ~= "http"
-          -- end,
-        },
+        format_on_save = function(bufnr)
+          local ft = vim.bo[bufnr].filetype
+          if ft == "http" or ft == "rest" or ft == "graphql" then
+            return nil
+          end
+          return { timeout_ms = 1000, lsp_fallback = true }
+        end,
       })
       vim.api.nvim_create_autocmd("BufWritePre", {
         pattern = "*",
         callback = function(args)
+          -- kulala's LSP formatter rewrites .http files on save: it sorts
+          -- @variables and prepends a leading "### " separator, which traps
+          -- file variables in the first block so {{var}} resolves to empty.
+          -- Skip the http family so document-level variables keep working.
+          local ft = vim.bo[args.buf].filetype
+          if ft == "http" or ft == "rest" or ft == "graphql" then
+            return
+          end
           require("conform").format({ async = false, lsp_format = "fallback", bufnr = args.buf })
         end,
       })
